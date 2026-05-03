@@ -11,7 +11,7 @@
 body{background:var(--paper);color:var(--wdp);font-family:'Noto Serif JP',serif;min-height:100vh;user-select:none;}
 
 header{text-align:center;padding:14px 20px 10px;border-bottom:2px solid var(--wm);}
-h1{font-family:'Shippori Mincho',serif;font-size:clamp(18px,4vw,28px);letter-spacing:.15em;}
+h1{font-family:'Shippori Mincho',serif;font-size:clamp(28px,7vw,52px);letter-spacing:.15em;}
 
 .wrap{max-width:600px;margin:0 auto;padding:12px 10px 28px;}
 
@@ -23,26 +23,26 @@ h1{font-family:'Shippori Mincho',serif;font-size:clamp(18px,4vw,28px);letter-spa
 .p-cell{
   flex:1;
   display:flex;align-items:center;justify-content:center;
-  padding:7px 2px;
+  padding:8px 2px;
   border:2px solid var(--wm);background:white;border-radius:5px;
   cursor:pointer;transition:border-color .1s,background .1s;
 }
 .p-cell:hover{border-color:var(--wd);background:#fdf6ec;}
 .p-cell.selected{border-color:var(--wd);background:var(--wl);box-shadow:0 0 0 2px var(--wd);}
-.p-cell svg{width:100%;height:auto;display:block;pointer-events:none;max-width:60px;}
+.p-cell svg{width:100%;height:auto;display:block;pointer-events:none;max-width:70px;}
 
 /* Eraser button: spans both rows */
 .eraser-btn{
-  width:52px;flex-shrink:0;
+  width:60px;flex-shrink:0;
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
   border:2px solid var(--wm);background:white;border-radius:5px;
   cursor:pointer;transition:border-color .1s,background .1s;
-  font-size:24px;
+  font-size:28px;
   padding:6px 0;
 }
 .eraser-btn:hover{border-color:var(--wd);background:#fdf6ec;}
 .eraser-btn.selected{border-color:var(--wd);background:var(--wl);box-shadow:0 0 0 2px var(--wd);}
-.eraser-lbl{font-size:10px;color:var(--wd);font-family:'Noto Serif JP',serif;}
+.eraser-lbl{font-size:12px;color:var(--wd);font-family:'Noto Serif JP',serif;}
 
 /* ── CANVAS WRAPPER: full width, relative for overlaid buttons ── */
 .canvas-wrap{
@@ -62,11 +62,11 @@ canvas{display:block;touch-action:none;width:100% !important;height:auto !import
 /* Rotation buttons overlaid on bottom corners of canvas */
 .rot-btn{
   position:absolute;bottom:10px;
-  width:44px;height:44px;
+  width:52px;height:52px;
   border:1.5px solid var(--wm);
   background:rgba(255,248,240,0.92);
   backdrop-filter:blur(2px);
-  cursor:pointer;border-radius:6px;font-size:22px;color:var(--wd);
+  cursor:pointer;border-radius:6px;font-size:26px;color:var(--wd);
   transition:all .1s;
   display:flex;align-items:center;justify-content:center;
   z-index:10;
@@ -77,12 +77,12 @@ canvas{display:block;touch-action:none;width:100% !important;height:auto !import
 
 /* Zoom buttons: just above rotation buttons */
 .zoom-btn{
-  position:absolute;bottom:64px;
-  width:44px;height:44px;
+  position:absolute;bottom:72px;
+  width:52px;height:52px;
   border:1.5px solid var(--wm);
   background:rgba(255,248,240,0.92);
   backdrop-filter:blur(2px);
-  cursor:pointer;border-radius:6px;font-size:22px;color:var(--wd);
+  cursor:pointer;border-radius:6px;font-size:26px;color:var(--wd);
   transition:all .1s;
   display:flex;align-items:center;justify-content:center;
   z-index:10;
@@ -92,11 +92,11 @@ canvas{display:block;touch-action:none;width:100% !important;height:auto !import
 /* Move buttons at canvas edges */
 .move-btn{
   position:absolute;
-  width:44px;height:44px;
+  width:52px;height:52px;
   border:1.5px solid var(--wm);
   background:rgba(255,248,240,0.92);
   backdrop-filter:blur(2px);
-  cursor:pointer;border-radius:6px;font-size:22px;color:var(--wd);
+  cursor:pointer;border-radius:6px;font-size:26px;color:var(--wd);
   transition:all .1s;
   display:flex;align-items:center;justify-content:center;
   z-index:10;
@@ -105,13 +105,14 @@ canvas{display:block;touch-action:none;width:100% !important;height:auto !import
 
 /* ── STATS + BOTTOM ── */
 .stats-row{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:10px;}
-.pb-wrap{width:180px;height:6px;background:var(--wl);border-radius:3px;overflow:hidden;}
-.pf{height:100%;background:var(--wd);border-radius:3px;transition:width .3s;}
-.piece-count{font-size:14px;color:var(--wd);}
+.pb-wrap{width:280px;height:7px;background:var(--wl);border-radius:4px;overflow:hidden;}
+.pf{height:100%;background:var(--wd);border-radius:4px;transition:width .3s;}
+.piece-count{font-size:22px;color:var(--wd);white-space:nowrap;}
 .bottom-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;}
 .btn{
-  padding:10px 20px;border:none;cursor:pointer;
-  font-family:'Noto Serif JP',serif;font-size:14px;
+  flex:1;
+  padding:14px 10px;border:none;cursor:pointer;
+  font-family:'Noto Serif JP',serif;font-size:clamp(15px,3.5vw,22px);
   border-radius:4px;transition:all .15s;
 }
 .btn-p{background:var(--wd);color:var(--paper);}
@@ -122,9 +123,9 @@ canvas{display:block;touch-action:none;width:100% !important;height:auto !import
 /* Modal */
 .ov{display:none;position:fixed;inset:0;background:rgba(74,44,26,.85);z-index:200;align-items:center;justify-content:center;}
 .ov.show{display:flex;}
-.mc{background:var(--paper);padding:32px;text-align:center;max-width:300px;border-radius:4px;box-shadow:0 20px 60px rgba(0,0,0,.4);}
-.mct{font-family:'Shippori Mincho',serif;font-size:24px;margin-bottom:6px;}
-.mcs{font-size:13px;color:var(--wd);margin-bottom:14px;line-height:1.8;}
+.mc{background:var(--paper);padding:32px;text-align:center;max-width:320px;border-radius:4px;box-shadow:0 20px 60px rgba(0,0,0,.4);}
+.mct{font-family:'Shippori Mincho',serif;font-size:28px;margin-bottom:6px;}
+.mcs{font-size:15px;color:var(--wd);margin-bottom:14px;line-height:1.8;}
 #thumb{border:2px solid var(--wm);margin-bottom:14px;}
 </style>
 </head>
@@ -135,9 +136,9 @@ canvas{display:block;touch-action:none;width:100% !important;height:auto !import
 
 <div class="wrap">
   <!-- Wood name header: offset by eraser width -->
-  <div style="display:flex;gap:6px;margin-bottom:5px;">
-    <div style="display:flex;gap:6px;flex:1;" id="woodNames"></div>
-    <div style="width:52px;flex-shrink:0;"></div>
+  <div style="display:flex;gap:6px;margin-bottom:5px;align-items:flex-end;">
+    <div style="display:flex;gap:6px;flex:1;align-items:flex-end;" id="woodNames"></div>
+    <div style="width:60px;flex-shrink:0;"></div>
   </div>
 
   <!-- Palette: tri/rhombus rows + eraser -->
@@ -194,11 +195,11 @@ canvas{display:block;touch-action:none;width:100% !important;height:auto !import
 (function(){
 
 var WOODS=[
-  {jp:'ミズキ',       color:'#e8d8bb'},
-  {jp:'ホオノキ',     color:'#bfa96e'},
-  {jp:'ウルシ',       color:'#c8a800'},
-  {jp:'チャンチン',   color:'#c85a3a'},
-  {jp:'ウォールナット',color:'#6a5858'},
+  {jp:'ミズキ',         color:'#e8d8bb'},
+  {jp:'ホオノキ',       color:'#bfa96e'},
+  {jp:'ウルシ',         color:'#c8a800'},
+  {jp:'チャン\nチン',   color:'#c85a3a'},
+  {jp:'ウォール\nナット',color:'#6a5858'},
 ];
 
 var globalRotSteps = 1; // 30° default: vertical lines
@@ -403,7 +404,7 @@ function animateWarns(){
 var woodNamesEl=document.getElementById('woodNames');
 WOODS.forEach(function(w){
   var el=document.createElement('div');
-  el.style.cssText='flex:1;font-size:11px;color:#8b5e3c;text-align:center;white-space:nowrap;overflow:hidden;';
+  el.style.cssText='flex:1;font-size:16px;color:#8b5e3c;text-align:center;white-space:pre;line-height:1.4;display:flex;align-items:flex-end;justify-content:center;';
   el.textContent=w.jp;
   woodNamesEl.appendChild(el);
 });
