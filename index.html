@@ -358,7 +358,7 @@ function render(){
   for(var r=rStart;r<rEnd;r++) for(var c=cStart;c<cEnd;c++){
     var v=getVerts(c,r);
     ctx.beginPath();ctx.moveTo(v[0].x,v[0].y);ctx.lineTo(v[1].x,v[1].y);ctx.lineTo(v[2].x,v[2].y);ctx.closePath();
-    ctx.strokeStyle='rgba(201,169,110,0.3)';ctx.lineWidth=1.0;ctx.stroke();
+    ctx.strokeStyle='rgba(201,169,110,0.3)';ctx.lineWidth=1.2;ctx.stroke();
   }
 
   // pieces: fill completely covers grid lines underneath
