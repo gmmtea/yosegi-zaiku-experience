@@ -216,8 +216,9 @@ var H    = T*Math.sqrt(3)/2;
 var PAD  = 4;
 var CW   = 900;
 var CH   = 900;
-var COLS = Math.ceil(CW/(T/2))+4;
-var ROWS = Math.ceil(CH/H)+4;
+// COLS/ROWS: enough to cover canvas diagonal when rotated (diagonal = CW*√2 ≈ 1273)
+var COLS = Math.ceil(1400/(T/2))+4;
+var ROWS = Math.ceil(1400/H)+4;
 
 function snapToCenter(){
   gridOffX = CW/2 - Math.round((CW/2)/(T/2)) * (T/2);
@@ -248,7 +249,7 @@ function getCenter(c,r){
   var v=getVerts(c,r);
   return{x:(v[0].x+v[1].x+v[2].x)/3,y:(v[0].y+v[1].y+v[2].y)/3};
 }
-function cellInGrid(c,r){return c>=0&&r>=0&&c<COLS&&r<ROWS;}
+function cellInGrid(c,r){ return true; }
 function sign3(ax,ay,bx,by,cx,cy){return(ax-cx)*(by-cy)-(bx-cx)*(ay-cy);}
 function ptInTri(px,py,v){
   var d1=sign3(px,py,v[0].x,v[0].y,v[1].x,v[1].y);
@@ -328,7 +329,7 @@ function drawPieceBorder(c2d,cells){
       var k=ek(e[0],e[1]);cnt[k]=(cnt[k]||0)+1;dat[k]=e;
     });
   });
-  c2d.strokeStyle='rgba(255,255,255,0.6)';c2d.lineWidth=0.8;c2d.lineCap='round';
+  c2d.strokeStyle='rgba(255,255,255,0.6)';c2d.lineWidth=1.0;c2d.lineCap='round';
   for(var k in cnt){
     if(cnt[k]===1){var e=dat[k];c2d.beginPath();c2d.moveTo(e[0].x,e[0].y);c2d.lineTo(e[1].x,e[1].y);c2d.stroke();}
   }
@@ -350,10 +351,14 @@ function render(){
   ctx.fillStyle='#fff8f0';ctx.fillRect(-CW,-CH,CW*3,CH*3);
 
   // grid (drawn first, will be covered by piece fills)
-  for(var r=0;r<ROWS;r++) for(var c=0;c<COLS;c++){
+  var cStart = Math.floor(-gridOffX / (T/2)) - 2;
+  var rStart = Math.floor(-gridOffY / H) - 2;
+  var cEnd   = cStart + COLS + 4;
+  var rEnd   = rStart + ROWS + 4;
+  for(var r=rStart;r<rEnd;r++) for(var c=cStart;c<cEnd;c++){
     var v=getVerts(c,r);
     ctx.beginPath();ctx.moveTo(v[0].x,v[0].y);ctx.lineTo(v[1].x,v[1].y);ctx.lineTo(v[2].x,v[2].y);ctx.closePath();
-    ctx.strokeStyle='rgba(201,169,110,0.2)';ctx.lineWidth=0.5;ctx.stroke();
+    ctx.strokeStyle='rgba(201,169,110,0.3)';ctx.lineWidth=1.0;ctx.stroke();
   }
 
   // pieces: fill completely covers grid lines underneath
@@ -404,7 +409,7 @@ function animateWarns(){
 var woodNamesEl=document.getElementById('woodNames');
 WOODS.forEach(function(w){
   var el=document.createElement('div');
-  el.style.cssText='flex:1;font-size:16px;color:#8b5e3c;text-align:center;white-space:pre;line-height:1.4;display:flex;align-items:flex-end;justify-content:center;';
+  el.style.cssText='flex:1;font-size:19px;color:#8b5e3c;text-align:center;white-space:pre;line-height:1.4;display:flex;align-items:flex-end;justify-content:center;';
   el.textContent=w.jp;
   woodNamesEl.appendChild(el);
 });
@@ -539,8 +544,8 @@ function applyZoom(newT){
 
   T = newT;
   H = T*Math.sqrt(3)/2;
-  COLS = Math.ceil(CW/(T/2))+4;
-  ROWS = Math.ceil(CH/H)+4;
+  COLS = Math.ceil(1400/(T/2))+4;
+  ROWS = Math.ceil(1400/H)+4;
 
   // Restore: same grid coord stays at canvas center AFTER zoom
   gridOffX = CW/2 - fx * (T/2);
