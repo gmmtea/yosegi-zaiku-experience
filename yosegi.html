@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>箱根寄木細工体験</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Shippori+Mincho:wght@700&display=swap');
+:root{--paper:#f5ede0;--wl:#e8d5b7;--wm:#c9a96e;--wd:#8b5e3c;--wdp:#4a2c1a;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--paper);color:var(--wdp);font-family:'Noto Serif JP',serif;min-height:100vh;user-select:none;}
+header{text-align:center;padding:12px 20px 8px;border-bottom:2px solid var(--wm);}
+h1{font-family:'Shippori Mincho',serif;font-size:clamp(15px,3vw,24px);letter-spacing:.15em;}
+.sub{font-size:10px;letter-spacing:.3em;color:var(--wd);margin-top:2px;text-transform:uppercase;}
+.wrap{max-width:680px;margin:0 auto;padding:10px 12px 24px;}
+
+/* ── PALETTE ── */
+.palette-lbl{font-size:10px;letter-spacing:.22em;color:var(--wd);text-transform:uppercase;
+  border-bottom:1px solid var(--wm);padding-bottom:3px;margin-bottom:8px;}
+
+/* Wood name header row */
+.wood-names{display:flex;gap:5px;margin-bottom:4px;justify-content:center;}
+.wood-name{width:58px;font-size:9px;color:var(--wd);text-align:center;flex-shrink:0;white-space:nowrap;}
+
+/* Each palette row */
+.palette-rows{display:flex;flex-direction:column;gap:5px;margin-bottom:10px;align-items:center;}
+.palette-grid{display:flex;gap:5px;justify-content:center;}
+
+/* All cells same width = rhombus width. Triangle SVG centered in same box. */
+.p-cell{
+  width:58px;
+  display:flex;align-items:center;justify-content:center;
+  padding:6px 2px;
+  border:2px solid var(--wm);background:white;border-radius:4px;
+  cursor:pointer;transition:border-color .1s,background .1s;
+}
+.p-cell:hover{border-color:var(--wd);background:#fdf6ec;}
+.p-cell.selected{border-color:var(--wd);background:var(--wl);box-shadow:0 0 0 2px var(--wd);}
+.p-cell svg{width:50px;height:auto;display:block;pointer-events:none;}
+
+/* ── CANVAS ROW ── */
+.canvas-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:6px;}
+.rot-btn{width:36px;height:36px;border:1.5px solid var(--wm);background:white;cursor:pointer;
+  border-radius:4px;font-size:20px;color:var(--wd);transition:all .1s;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;}
+.rot-btn:hover{border-color:var(--wd);background:var(--wl);}
+.cbox{background:#fff8f0;border:1px solid var(--wm);
+  box-shadow:3px 3px 0 var(--wm),6px 6px 0 rgba(139,94,60,.15);border-radius:2px;overflow:hidden;}
+canvas{display:block;touch-action:none;}
+
+/* ── STATS + BOTTOM ── */
+.stats-row{display:flex;align-items:center;gap:8px;justify-content:center;margin-bottom:7px;}
+.pb-wrap{width:160px;height:5px;background:var(--wl);border-radius:3px;overflow:hidden;}
+.pf{height:100%;background:var(--wd);border-radius:3px;transition:width .3s;}
+.piece-count{font-size:11px;color:var(--wd);}
+.bottom-bar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center;}
+.btn{padding:7px 14px;border:none;cursor:pointer;font-family:'Noto Serif JP',serif;
+  font-size:11px;border-radius:3px;transition:all .15s;}
+.btn-p{background:var(--wd);color:var(--paper);}
+.btn-p:hover{background:var(--wdp);}
+.btn-s{background:transparent;color:var(--wd);border:1.5px solid var(--wm);}
+.btn-s:hover{border-color:var(--wd);background:var(--wl);}
+.btn-toggle{background:transparent;color:var(--wd);border:1.5px solid var(--wm);}
+.btn-toggle.on{background:var(--wl);border-color:var(--wd);}
+
+/* Ghost */
+#dragGhost{position:fixed;pointer-events:none;z-index:1000;display:none;transform:translate(-50%,-50%);}
+
+/* Modal */
+.ov{display:none;position:fixed;inset:0;background:rgba(74,44,26,.85);z-index:200;align-items:center;justify-content:center;}
+.ov.show{display:flex;}
+.mc{background:var(--paper);padding:28px;text-align:center;max-width:290px;border-radius:4px;box-shadow:0 20px 60px rgba(0,0,0,.4);}
+.mct{font-family:'Shippori Mincho',serif;font-size:22px;margin-bottom:4px;}
+.mcs{font-size:11px;color:var(--wd);margin-bottom:12px;line-height:1.7;}
+#thumb{border:2px solid var(--wm);margin-bottom:12px;}
+</style>
+</head>
+<body>
+<header>
+  <h1>箱根寄木細工体験</h1>
+  <div class="sub" style="display:none"></div>
+</header>
+
+<div class="wrap">
+  <!-- PALETTE -->
+  <!-- Wood name header -->
+  <div style="display:flex;justify-content:center;margin-bottom:4px;gap:5px;" id="woodNames"></div>
+
+  <div class="palette-rows">
+    <div class="palette-grid" id="palTri"></div>
+    <div class="palette-grid" id="palRh"></div>
+  </div>
+
+  <!-- CANVAS + rotation -->
+  <div class="canvas-row">
+    <button class="rot-btn" id="rotL">↺</button>
+    <div class="cbox"><canvas id="c"></canvas></div>
+    <button class="rot-btn" id="rotR">↻</button>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <span class="piece-count">ピース: <strong id="cnt">0</strong> / 40</span>
+    <div class="pb-wrap"><div class="pf" id="pf" style="width:0%"></div></div>
+  </div>
+
+  <!-- BOTTOM -->
+  <div class="bottom-bar">
+    <button class="btn btn-s" id="btnUndo">↩ 一つ戻す</button>
+    <button class="btn btn-s" id="btnClear">✕ 全消去</button>
+    <button class="btn btn-p" id="btnDone">完成！</button>
+  </div>
+</div>
+
+<canvas id="dragGhost" width="100" height="80"></canvas>
+
+<div class="ov" id="ov">
+  <div class="mc">
+    <div class="mct">完成！</div>
+    <div class="mcs">あなただけの寄木コースターが<br>できあがりました。</div>
+    <canvas id="thumb" width="200" height="200"></canvas><br>
+    <button class="btn btn-p" id="btnDl" style="margin-bottom:7px">画像を保存</button><br>
+    <button class="btn btn-s" id="btnClose">続けて作る</button>
+  </div>
+</div>
+
+<script>
+(function(){
+
+// ── Woods ─────────────────────────────────────────────────────
+var WOODS=[
+  {jp:'ミズキ',       color:'#e8d8bb'},
+  {jp:'ホオノキ',     color:'#bfa96e'},
+  {jp:'ウルシ',       color:'#c8a800'},
+  {jp:'チャンチン',   color:'#c85a3a'},
+  {jp:'ウォールナット',color:'#6a5858'},
+];
+
+// ── State ─────────────────────────────────────────────────────
+var showOutline    = true;  // always on, kept for compat
+var globalRotSteps = 0;
+var pieces         = [];
+var triMap         = {};
+var nextId         = 1;
+
+var selShape = null;
+var selColor = null;
+var selCell  = null;
+var hoverDir = 'rh0';
+
+var isDragging   = false;
+var dragStarted  = false;
+var dragStartX   = 0, dragStartY = 0;
+var DRAG_THRESH  = 6;
+
+// Flash-red warning state: key → timestamp
+var warnCells = {};
+var WARN_MS   = 600;
+
+// ── Grid ──────────────────────────────────────────────────────
+var T    = 40;
+var H    = T * Math.sqrt(3) / 2;
+var PAD  = 4;
+var COLS = 22;
+var ROWS = 13;
+var CW   = Math.ceil(PAD*2 + COLS*T/2 + T/2);
+var CH   = Math.ceil(PAD*2 + ROWS*H + 2);
+
+var canvas = document.getElementById('c');
+var ctx    = canvas.getContext('2d');
+canvas.width  = CW;
+canvas.height = CH;
+
+function resize(){
+  var wrap=document.querySelector('.wrap');
+  var avail=Math.min(CW, wrap.offsetWidth - 2*44 - 24);
+  canvas.style.width=avail+'px';
+  canvas.style.height=Math.round(avail*CH/CW)+'px';
+}
+
+window.addEventListener('resize', resize);
+
+// ── Geometry ──────────────────────────────────────────────────
+function isUp(c,r){ return (c+r)%2===0; }
+
+function getVerts(c,r){
+  var x0=PAD+c*T/2, y0=PAD+r*H;
+  if(isUp(c,r)) return [{x:x0+T/2,y:y0},{x:x0+T,y:y0+H},{x:x0,y:y0+H}];
+  return [{x:x0,y:y0},{x:x0+T,y:y0},{x:x0+T/2,y:y0+H}];
+}
+
+function getCenter(c,r){
+  var v=getVerts(c,r);
+  return {x:(v[0].x+v[1].x+v[2].x)/3, y:(v[0].y+v[1].y+v[2].y)/3};
+}
+
+function cellInGrid(c,r){ return c>=0&&r>=0&&c<COLS&&r<ROWS; }
+
+function sign3(ax,ay,bx,by,cx,cy){return(ax-cx)*(by-cy)-(bx-cx)*(ay-cy);}
+function ptInTri(px,py,v){
+  var d1=sign3(px,py,v[0].x,v[0].y,v[1].x,v[1].y);
+  var d2=sign3(px,py,v[1].x,v[1].y,v[2].x,v[2].y);
+  var d3=sign3(px,py,v[2].x,v[2].y,v[0].x,v[0].y);
+  return !((d1<0||d2<0||d3<0)&&(d1>0||d2>0||d3>0));
+}
+
+function hitTest(px,py){
+  var ac=Math.floor((px-PAD)/(T/2)), ar=Math.floor((py-PAD)/H);
+  for(var dr=-1;dr<=1;dr++) for(var dc=-2;dc<=2;dc++){
+    var c=ac+dc, r=ar+dr;
+    if(!cellInGrid(c,r)) continue;
+    if(ptInTri(px,py,getVerts(c,r))) return{col:c,row:r};
+  }
+  return null;
+}
+
+// ── Rhombus pairs ─────────────────────────────────────────────
+function getRhPair(c,r,dir){
+  var up=isUp(c,r), p;
+  if(dir==='rh0') p=up?{col:c+1,row:r}:{col:c-1,row:r};
+  else if(dir==='rh1') p=up?{col:c,row:r+1}:{col:c,row:r-1};
+  else p=up?{col:c-1,row:r}:{col:c+1,row:r};
+  return [{col:c,row:r}, p];
+}
+
+// Best rhombus direction: nearest edge midpoint to cursor
+function bestRhDir(c,r,px,py){
+  var v  = getVerts(c,r);
+  var up = isUp(c,r);
+  // 3 edges and their midpoints
+  var mids = [
+    {mx:(v[0].x+v[1].x)/2, my:(v[0].y+v[1].y)/2},
+    {mx:(v[1].x+v[2].x)/2, my:(v[1].y+v[2].y)/2},
+    {mx:(v[2].x+v[0].x)/2, my:(v[2].y+v[0].y)/2},
+  ];
+  var best=0, bd=Infinity;
+  for(var i=0;i<3;i++){
+    var dx=mids[i].mx-px, dy=mids[i].my-py;
+    var d=dx*dx+dy*dy;
+    if(d<bd){bd=d; best=i;}
+  }
+  // up-tri  [apex,BR,BL]: edge0=apex-BR→rh0, edge1=BR-BL→rh1, edge2=BL-apex→rh2
+  // down-tri[TL,TR,apex]: edge0=TL-TR→rh1,  edge1=TR-apex→rh2, edge2=apex-TL→rh0
+  if(up){
+    return ['rh0','rh1','rh2'][best];
+  } else {
+    return ['rh1','rh2','rh0'][best];
+  }
+}
+
+// ── Canvas coordinate transform ───────────────────────────────
+function canvasPos(e){
+  var rect=canvas.getBoundingClientRect();
+  var sx=CW/rect.width, sy=CH/rect.height;
+  var ex=(e.clientX!==undefined?e.clientX:e.touches[0].clientX)-rect.left;
+  var ey=(e.clientY!==undefined?e.clientY:e.touches[0].clientY)-rect.top;
+  var cx=ex*sx, cy=ey*sy;
+  var a=globalRotSteps*Math.PI/6;
+  var dx=cx-CW/2, dy=cy-CH/2;
+  var co=Math.cos(-a), si=Math.sin(-a);
+  return{x:co*dx-si*dy+CW/2, y:si*dx+co*dy+CH/2};
+}
+
+// ── Drawing ───────────────────────────────────────────────────
+function luma(hex){
+  return .299*parseInt(hex.slice(1,3),16)+.587*parseInt(hex.slice(3,5),16)+.114*parseInt(hex.slice(5,7),16);
+}
+
+function fillTri(c2d, v, color){
+  c2d.beginPath();
+  c2d.moveTo(v[0].x,v[0].y); c2d.lineTo(v[1].x,v[1].y); c2d.lineTo(v[2].x,v[2].y);
+  c2d.closePath();
+  c2d.fillStyle=color; c2d.fill();
+  c2d.save(); c2d.clip();
+  c2d.strokeStyle=luma(color)>100?'rgba(0,0,0,0.06)':'rgba(255,255,255,0.04)';
+  c2d.lineWidth=0.7;
+  for(var i=-80;i<80;i+=5){c2d.beginPath();c2d.moveTo(-80+i,-80);c2d.lineTo(80+i,80);c2d.stroke();}
+  c2d.restore();
+}
+
+function drawPieceBorder(c2d, cells, color){
+  var eps=0.5;
+  function ek(a,b){
+    var ka=Math.round(a.x/eps)+','+Math.round(a.y/eps);
+    var kb=Math.round(b.x/eps)+','+Math.round(b.y/eps);
+    return ka<kb?ka+'|'+kb:kb+'|'+ka;
+  }
+  var cnt={}, dat={};
+  cells.forEach(function(cc){
+    var v=getVerts(cc.col,cc.row);
+    [[v[0],v[1]],[v[1],v[2]],[v[2],v[0]]].forEach(function(e){
+      var k=ek(e[0],e[1]); cnt[k]=(cnt[k]||0)+1; dat[k]=e;
+    });
+  });
+  // Always thin white outline
+  c2d.strokeStyle='rgba(255,255,255,0.6)';
+  c2d.lineWidth=0.8; c2d.lineCap='round';
+  for(var k in cnt){
+    if(cnt[k]===1){
+      var e=dat[k];
+      c2d.beginPath(); c2d.moveTo(e[0].x,e[0].y); c2d.lineTo(e[1].x,e[1].y); c2d.stroke();
+    }
+  }
+}
+
+function getPreviewCells(cell, shape, dir){
+  if(!cell) return [];
+  if(shape==='tri') return [{col:cell.col,row:cell.row}];
+  return getRhPair(cell.col,cell.row,dir).filter(function(cc){return cc&&cellInGrid(cc.col,cc.row);});
+}
+
+// ── Render ────────────────────────────────────────────────────
+function render(){
+  ctx.clearRect(0,0,CW,CH);
+  ctx.save();
+  var a=globalRotSteps*Math.PI/6;
+  ctx.translate(CW/2,CH/2); ctx.rotate(a); ctx.translate(-CW/2,-CH/2);
+
+  // bg
+  ctx.fillStyle='#fff8f0'; ctx.fillRect(-CW,-CH,CW*3,CH*3);
+
+  // full grid
+  for(var r=0;r<ROWS;r++) for(var c=0;c<COLS;c++){
+    var v=getVerts(c,r);
+    ctx.beginPath(); ctx.moveTo(v[0].x,v[0].y); ctx.lineTo(v[1].x,v[1].y); ctx.lineTo(v[2].x,v[2].y); ctx.closePath();
+    ctx.strokeStyle='rgba(201,169,110,0.18)'; ctx.lineWidth=0.5; ctx.stroke();
+  }
+
+  // fill pass
+  pieces.forEach(function(piece){
+    piece.keys.forEach(function(key){
+      var p=key.split(',');
+      fillTri(ctx, getVerts(+p[0],+p[1]), piece.color);
+    });
+  });
+
+  // outline pass
+  if(showOutline){
+    pieces.forEach(function(piece){
+      var cells=piece.keys.map(function(k){var p=k.split(',');return{col:+p[0],row:+p[1]};});
+      drawPieceBorder(ctx, cells, piece.color);
+    });
+  }
+
+  // warn flash
+  var now=Date.now();
+  for(var key in warnCells){
+    if(now-warnCells[key]<WARN_MS){
+      var p=key.split(',');
+      var v=getVerts(+p[0],+p[1]);
+      var alpha=0.5*(1-((now-warnCells[key])/WARN_MS));
+      ctx.save(); ctx.globalAlpha=alpha;
+      ctx.beginPath(); ctx.moveTo(v[0].x,v[0].y); ctx.lineTo(v[1].x,v[1].y); ctx.lineTo(v[2].x,v[2].y); ctx.closePath();
+      ctx.fillStyle='#ff3333'; ctx.fill();
+      ctx.restore();
+    } else {
+      delete warnCells[key];
+    }
+  }
+
+  // hover preview
+  if(selShape && selCell){
+    var pcells=getPreviewCells(selCell, selShape, hoverDir);
+    ctx.globalAlpha=0.45;
+    pcells.forEach(function(cc){fillTri(ctx,getVerts(cc.col,cc.row),selColor);});
+    ctx.globalAlpha=1;
+    if(showOutline) drawPieceBorder(ctx, pcells, selColor);
+  }
+
+  ctx.restore();
+}
+
+// Animate warn flashes
+function animateWarns(){
+  var now=Date.now();
+  var any=false;
+  for(var k in warnCells){ if(now-warnCells[k]<WARN_MS){any=true;break;} }
+  if(any){ render(); requestAnimationFrame(animateWarns); }
+}
+
+// ── Ghost ─────────────────────────────────────────────────────
+// Ghost canvas size: wide enough for rh0 (width=3T/2=60) + rh1 height (2H≈69)
+// Use T=40, H=T*√3/2≈34.6
+// Ghost canvas: 100×80 (rh0 fits: w=60, h=34.6 → add padding)
+var ghost=document.getElementById('dragGhost');
+var gctx=ghost.getContext('2d');
+var GW=100, GH=80;
+ghost.width=GW; ghost.height=GH;
+
+function drawGhost(shape, dir, color){
+  gctx.clearRect(0,0,GW,GH);
+  var t=T, h=H; // same as grid
+  var cx=GW/2, cy=GH/2;
+
+  // Compute rhombus vertices centered in ghost canvas
+  // All raw coords computed with same T, H as the grid
+  var pts=[];
+  if(shape==='tri'){
+    // up-pointing equilateral triangle, centered
+    pts=[
+      {x:cx,        y:cy - h*2/3},
+      {x:cx + t/2,  y:cy + h/3},
+      {x:cx - t/2,  y:cy + h/3},
+    ];
+  } else {
+    // All 3 rhombus orientations: 4 unique vertices
+    // rh0: up(0,0)+down(1,0) → pts (T/2,0),(3T/2,0),(T,H),(0,H)
+    //   center of this shape: ((T/2+3T/2+T+0)/4, (0+0+H+H)/4) = (T, H/2)
+    //   shift to canvas center
+    if(dir==='rh0'){
+      var raw=[[t/2,0],[3*t/2,0],[t,h],[0,h]];
+      var rcx=t, rcy=h/2;
+      pts=raw.map(function(p){return{x:cx+(p[0]-rcx),y:cy+(p[1]-rcy)};});
+    } else if(dir==='rh1'){
+      // rh1: up(0,0)+down(0,1) → (T/2,0),(T,H),(T/2,2H),(0,H)
+      var raw=[[t/2,0],[t,h],[t/2,2*h],[0,h]];
+      var rcx=t/2, rcy=h;
+      pts=raw.map(function(p){return{x:cx+(p[0]-rcx),y:cy+(p[1]-rcy)};});
+    } else {
+      // rh2: up(0,0)+down(-1,0) → shifted: (0,0),(T,0),(3T/2,H),(T/2,H)
+      // raw: (-T/2,0),(T/2,0),(T,H),(0,H) → shift +T/2: (0,0),(T,0),(3T/2,H),(T/2,H)
+      var raw=[[0,0],[t,0],[3*t/2,h],[t/2,h]];
+      var rcx=3*t/4, rcy=h/2;
+      pts=raw.map(function(p){return{x:cx+(p[0]-rcx),y:cy+(p[1]-rcy)};});
+    }
+  }
+
+  gctx.globalAlpha=0.85;
+  gctx.beginPath();
+  gctx.moveTo(pts[0].x,pts[0].y);
+  for(var i=1;i<pts.length;i++) gctx.lineTo(pts[i].x,pts[i].y);
+  gctx.closePath();
+  gctx.fillStyle=color; gctx.fill();
+  gctx.strokeStyle='rgba(255,255,255,0.7)'; gctx.lineWidth=0.8; gctx.lineJoin='round'; gctx.stroke();
+  gctx.globalAlpha=1;
+}
+
+// Wood name headers
+var woodNamesEl=document.getElementById('woodNames');
+WOODS.forEach(function(w){
+  var el=document.createElement('div');
+  el.style.cssText='width:58px;font-size:8px;color:#8b5e3c;text-align:center;flex-shrink:0;white-space:nowrap;';
+  el.textContent=w.jp;
+  woodNamesEl.appendChild(el);
+});
+
+function makeSVG(shape, color){
+  var stroke='rgba(255,255,255,0.7)';
+  if(shape==='tri'){
+    // viewBox 54×31.2, triangle centered horizontally: apex at (27,0), base at y=31.2 width=36
+    // left edge at (27-18)=9, right edge at (27+18)=45
+    return '<svg viewBox="0 0 54 31.2" xmlns="http://www.w3.org/2000/svg">'
+      +'<path d="M27,0 L45,31.2 L9,31.2 Z" fill="'+color+'" stroke="'+stroke+'" stroke-width="0.8" stroke-linejoin="round"/>'
+      +'</svg>';
+  } else {
+    return '<svg viewBox="0 0 54 31.2" xmlns="http://www.w3.org/2000/svg">'
+      +'<path d="M18,0 L54,0 L36,31.2 L0,31.2 Z" fill="'+color+'" stroke="'+stroke+'" stroke-width="0.8" stroke-linejoin="round"/>'
+      +'</svg>';
+  }
+}
+
+function makePaletteCell(shape, wood){
+  var cell=document.createElement('div');
+  cell.className='p-cell';
+  cell.innerHTML=makeSVG(shape, wood.color);
+
+  cell.addEventListener('click',function(){
+    selShape=shape; selColor=wood.color;
+    document.querySelectorAll('.p-cell').forEach(function(c){c.classList.remove('selected');});
+    cell.classList.add('selected');
+    canvas.style.cursor='crosshair';
+  });
+  cell.addEventListener('pointerdown',function(e){
+    selShape=shape; selColor=wood.color;
+    document.querySelectorAll('.p-cell').forEach(function(c){c.classList.remove('selected');});
+    cell.classList.add('selected');
+    isDragging=true; dragStarted=false;
+    dragStartX=e.clientX; dragStartY=e.clientY;
+    e.preventDefault();
+  });
+  return cell;
+}
+
+var palTri=document.getElementById('palTri');
+var palRh=document.getElementById('palRh');
+WOODS.forEach(function(w){
+  palTri.appendChild(makePaletteCell('tri',w));
+  palRh.appendChild(makePaletteCell('rhombus',w));
+});
+
+// ── Pointer events ────────────────────────────────────────────
+window.addEventListener('pointermove',function(e){
+  if(isDragging){
+    var dx=e.clientX-dragStartX, dy=e.clientY-dragStartY;
+    if(!dragStarted && Math.sqrt(dx*dx+dy*dy)>DRAG_THRESH){
+      dragStarted=true;
+      ghost.style.display='block';
+    }
+    if(dragStarted){
+      ghost.style.left=e.clientX+'px'; ghost.style.top=e.clientY+'px';
+    }
+  }
+  var rect=canvas.getBoundingClientRect();
+  var onCanvas=e.clientX>=rect.left&&e.clientX<=rect.right&&e.clientY>=rect.top&&e.clientY<=rect.bottom;
+  if(onCanvas&&selShape){
+    var p=canvasPos(e);
+    selCell=hitTest(p.x,p.y);
+    if(selCell&&selShape==='rhombus'){
+      hoverDir=bestRhDir(selCell.col,selCell.row,p.x,p.y);
+      if(dragStarted) drawGhost('rhombus',hoverDir,selColor);
+    } else if(dragStarted&&selShape==='tri'){
+      drawGhost('tri','rh0',selColor);
+    }
+  } else {
+    if(onCanvas===false) selCell=null;
+  }
+  render();
+});
+
+window.addEventListener('pointerup',function(e){
+  if(!isDragging) return;
+  var wasDrag=dragStarted;
+  isDragging=false; dragStarted=false;
+  ghost.style.display='none';
+  if(wasDrag&&selCell&&selShape){
+    var p=canvasPos(e);
+    if(selShape==='rhombus') hoverDir=bestRhDir(selCell.col,selCell.row,p.x,p.y);
+    doPlace(selCell.col,selCell.row);
+    render();
+  }
+});
+
+canvas.addEventListener('pointerdown',function(e){
+  e.preventDefault();
+  if(!selShape) return;
+  isDragging=true; dragStarted=false;
+  dragStartX=e.clientX; dragStartY=e.clientY;
+});
+
+canvas.addEventListener('click',function(e){
+  if(!selShape) return;
+  var p=canvasPos(e);
+  var cell=hitTest(p.x,p.y);
+  if(!cell) return;
+  if(selShape==='rhombus') hoverDir=bestRhDir(cell.col,cell.row,p.x,p.y);
+  doPlace(cell.col,cell.row);
+  render();
+});
+
+canvas.addEventListener('mouseleave',function(){ selCell=null; render(); });
+
+// Right-click or no-selection click → remove piece
+canvas.addEventListener('contextmenu',function(e){
+  e.preventDefault();
+  var p=canvasPos(e);
+  var cell=hitTest(p.x,p.y);
+  if(!cell) return;
+  removePieceAt(cell.col,cell.row);
+});
+
+function removePieceAt(col,row){
+  var key=col+','+row;
+  for(var i=pieces.length-1;i>=0;i--){
+    if(pieces[i].keys.indexOf(key)>=0){
+      pieces[i].keys.forEach(function(k){delete triMap[k];});
+      pieces.splice(i,1);
+      updateStats(); render(); return;
+    }
+  }
+}
+
+function doPlace(col,row){
+  var cells=selShape==='tri'
+    ?[{col:col,row:row}]
+    :getRhPair(col,row,hoverDir).filter(function(cc){return cc&&cellInGrid(cc.col,cc.row);});
+  if(!cells.length) return;
+
+  // Check for occupied cells
+  var blocked=false;
+  cells.forEach(function(cc){
+    if(triMap[cc.col+','+cc.row]){
+      blocked=true;
+      warnCells[cc.col+','+cc.row]=Date.now();
+    }
+  });
+  if(blocked){ requestAnimationFrame(animateWarns); return; }
+
+  var keys=cells.map(function(cc){return cc.col+','+cc.row;});
+  pieces.push({id:nextId++,type:selShape,keys:keys,color:selColor});
+  keys.forEach(function(k){triMap[k]=selColor;});
+  updateStats();
+}
+
+function updateStats(){
+  var n=pieces.length;
+  document.getElementById('cnt').textContent=n;
+  document.getElementById('pf').style.width=Math.min(n/40*100,100)+'%';
+}
+
+// ── Controls ──────────────────────────────────────────────────
+document.getElementById('rotL').addEventListener('click',function(){ globalRotSteps=(globalRotSteps-1+12)%12; render(); });
+document.getElementById('rotR').addEventListener('click',function(){ globalRotSteps=(globalRotSteps+1)%12; render(); });
+
+document.getElementById('btnUndo').addEventListener('click',function(){
+  if(!pieces.length) return;
+  var p=pieces.pop();
+  p.keys.forEach(function(k){delete triMap[k];});
+  updateStats(); render();
+});
+document.getElementById('btnClear').addEventListener('click',function(){
+  pieces=[]; triMap={}; updateStats(); render();
+});
+document.getElementById('btnDone').addEventListener('click',function(){
+  document.getElementById('ov').classList.add('show');
+  document.getElementById('thumb').getContext('2d').drawImage(canvas,0,0,CW,CH,0,0,200,200);
+});
+document.getElementById('btnClose').addEventListener('click',function(){
+  document.getElementById('ov').classList.remove('show');
+});
+document.getElementById('btnDl').addEventListener('click',function(){
+  var a=document.createElement('a'); a.download='yosegi.png'; a.href=canvas.toDataURL(); a.click();
+});
+document.getElementById('ov').addEventListener('click',function(e){
+  if(e.target===this) this.classList.remove('show');
+});
+
+// ── Init ──────────────────────────────────────────────────────
+resize();
+render();
+
+})();
+</script>
+</body>
+</html>
