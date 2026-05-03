@@ -126,7 +126,6 @@ canvas{display:block;touch-action:none;width:100% !important;height:auto !import
 .mc{background:var(--paper);padding:40px;text-align:center;max-width:440px;width:90%;border-radius:4px;box-shadow:0 20px 60px rgba(0,0,0,.4);}
 .mct{font-family:'Shippori Mincho',serif;font-size:36px;margin-bottom:8px;}
 .mcs{font-size:18px;color:var(--wd);margin-bottom:20px;line-height:1.8;}
-#thumb{border:2px solid var(--wm);margin-bottom:20px;width:300px;height:300px;}
 </style>
 </head>
 <body>
@@ -185,7 +184,7 @@ canvas{display:block;touch-action:none;width:100% !important;height:auto !import
   <div class="mc">
     <div class="mct">完成！</div>
     <div class="mcs">あなただけの寄木コースターが<br>できあがりました。</div>
-    <canvas id="thumb" width="300" height="300"></canvas><br>
+    <canvas id="thumb" style="max-width:100%;border:2px solid var(--wm);margin-bottom:20px;display:block;margin-left:auto;margin-right:auto;"></canvas><br>
     <button class="btn btn-p" id="btnDl" style="margin-bottom:9px">画像を保存</button><br>
     <button class="btn btn-s" id="btnClose">続けて作る</button>
   </div>
@@ -358,7 +357,7 @@ function render(){
   for(var r=rStart;r<rEnd;r++) for(var c=cStart;c<cEnd;c++){
     var v=getVerts(c,r);
     ctx.beginPath();ctx.moveTo(v[0].x,v[0].y);ctx.lineTo(v[1].x,v[1].y);ctx.lineTo(v[2].x,v[2].y);ctx.closePath();
-    ctx.strokeStyle='rgba(201,169,110,0.3)';ctx.lineWidth=1.2;ctx.stroke();
+    ctx.strokeStyle='rgba(201,169,110,0.3)';ctx.lineWidth=1.0;ctx.stroke();
   }
 
   // pieces: fill completely covers grid lines underneath
@@ -584,7 +583,10 @@ document.getElementById('btnUndo').addEventListener('click',function(){
 document.getElementById('btnClear').addEventListener('click',function(){pieces=[];triMap={};updateStats();render();});
 document.getElementById('btnDone').addEventListener('click',function(){
   document.getElementById('ov').classList.add('show');
-  document.getElementById('thumb').getContext('2d').drawImage(canvas,0,0,CW,CH,0,0,300,300);
+  var thumb=document.getElementById('thumb');
+  thumb.width=CW; thumb.height=CH;
+  thumb.style.width='100%'; thumb.style.height='auto';
+  thumb.getContext('2d').drawImage(canvas,0,0,CW,CH,0,0,CW,CH);
 });
 document.getElementById('btnClose').addEventListener('click',function(){document.getElementById('ov').classList.remove('show');});
 document.getElementById('btnDl').addEventListener('click',function(){
