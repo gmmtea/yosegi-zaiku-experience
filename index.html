@@ -132,7 +132,7 @@ canvas{display:block;touch-action:none;width:100% !important;height:auto !import
 <body>
 <header>
   <h1>箱根寄木細工体験</h1>
-  <p style="font-size:clamp(11px,2vw,14px);color:var(--wd);margin-top:4px;opacity:.8;">箱根寄木細工のコースター作りに向けて、デザインを考えてみましょう。</p>
+  <p style="font-size:clamp(11px,2vw,14px);color:var(--wd);margin-top:4px;opacity:.8;"><a href="https://www.kanazashi-woodcraft.com/information.html" target="_blank" style="color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);">箱根寄木細工のコースター作り</a>に向けて、デザインを考えてみましょう。</p>
 </header>
 
 <div class="wrap">
@@ -204,7 +204,7 @@ canvas{display:block;touch-action:none;width:100% !important;height:auto !import
 <div class="ov" id="ov">
   <div class="mc">
     <div class="mct">完成！</div>
-    <div class="mcs">このデザインをお店で形にしましょう。</div>
+    <div class="mcs">このデザインを<a href="https://www.kanazashi-woodcraft.com/information.html" target="_blank" style="color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);">寄木体験</a>で形にしましょう。</div>
     <canvas id="thumb" style="max-width:100%;border:2px solid var(--wm);margin-bottom:14px;display:block;margin-left:auto;margin-right:auto;"></canvas>
     <div style="display:flex;gap:8px;margin-bottom:14px;">
       <button class="btn btn-p" id="btnDl" style="flex:1">画像を保存</button>
@@ -803,12 +803,12 @@ function launchConfetti(){
     pieces2.push({
       x: Math.random()*W,
       y: -size - Math.random()*H2*0.5,
-      vx: (Math.random()-0.5)*3,
-      vy: 1.5+Math.random()*3,
-      spin: (Math.random()-0.5)*0.08,
+      vx: (Math.random()-0.5)*5,
+      vy: 3+Math.random()*5,
+      spin: (Math.random()-0.5)*0.12,
       angle: Math.random()*Math.PI*2,
       size: size, shape: shape, color: color,
-      delay: Math.random()*800
+      delay: Math.random()*400
     });
   }
   var startTime=Date.now();
@@ -819,7 +819,7 @@ function launchConfetti(){
     var any=false;
     pieces2.forEach(function(p){
       if(elapsed<p.delay){any=true;return;}
-      p.x+=p.vx; p.y+=p.vy; p.vy+=0.06; p.angle+=p.spin;
+      p.x+=p.vx; p.y+=p.vy; p.vy+=0.12; p.angle+=p.spin;
       if(p.y<H2+50) any=true;
       drawConfettiPiece(cc,p);
     });
