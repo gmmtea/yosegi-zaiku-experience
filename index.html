@@ -42,7 +42,7 @@ h1{font-family:'Shippori Mincho',serif;font-size:clamp(28px,7vw,52px);letter-spa
 }
 .eraser-btn:hover{border-color:var(--wd);background:#fdf6ec;}
 .eraser-btn.selected{border-color:var(--wd);background:var(--wl);box-shadow:0 0 0 2px var(--wd);}
-.eraser-lbl{font-size:12px;color:var(--wd);font-family:'Noto Serif JP',serif;}
+.eraser-lbl{font-size:clamp(13px,3vw,19px);color:var(--wd);font-family:'Noto Serif JP',serif;}
 
 /* ── CANVAS WRAPPER: full width, relative for overlaid buttons ── */
 .canvas-wrap{
@@ -62,11 +62,11 @@ canvas{display:block;touch-action:none;width:100% !important;height:auto !import
 /* Rotation buttons overlaid on bottom corners of canvas */
 .rot-btn{
   position:absolute;bottom:10px;
-  width:52px;height:52px;
+  width:clamp(40px,7vw,52px);height:clamp(40px,7vw,52px);
   border:1.5px solid var(--wm);
   background:rgba(255,248,240,0.92);
   backdrop-filter:blur(2px);
-  cursor:pointer;border-radius:6px;font-size:26px;color:var(--wd);
+  cursor:pointer;border-radius:6px;font-size:clamp(20px,4.5vw,26px);color:var(--wd);
   transition:all .1s;
   display:flex;align-items:center;justify-content:center;
   z-index:10;
@@ -77,26 +77,27 @@ canvas{display:block;touch-action:none;width:100% !important;height:auto !import
 
 /* Zoom buttons: just above rotation buttons */
 .zoom-btn{
-  position:absolute;bottom:72px;
-  width:52px;height:52px;
+  position:absolute;bottom:clamp(56px,11vw,72px);
+  width:clamp(40px,7vw,52px);height:clamp(40px,7vw,52px);
   border:1.5px solid var(--wm);
   background:rgba(255,248,240,0.92);
   backdrop-filter:blur(2px);
-  cursor:pointer;border-radius:6px;font-size:26px;color:var(--wd);
+  cursor:pointer;border-radius:6px;font-size:clamp(20px,4.5vw,26px);color:var(--wd);
   transition:all .1s;
   display:flex;align-items:center;justify-content:center;
   z-index:10;
 }
 .zoom-btn:hover{border-color:var(--wd);background:var(--wl);}
+.zoom-btn:disabled{opacity:0.3;pointer-events:none;background:white;border-color:var(--wm);}
 
 /* Move buttons at canvas edges */
 .move-btn{
   position:absolute;
-  width:52px;height:52px;
+  width:clamp(40px,7vw,52px);height:clamp(40px,7vw,52px);
   border:1.5px solid var(--wm);
   background:rgba(255,248,240,0.92);
   backdrop-filter:blur(2px);
-  cursor:pointer;border-radius:6px;font-size:26px;color:var(--wd);
+  cursor:pointer;border-radius:6px;font-size:clamp(20px,4.5vw,26px);color:var(--wd);
   transition:all .1s;
   display:flex;align-items:center;justify-content:center;
   z-index:10;
@@ -105,7 +106,7 @@ canvas{display:block;touch-action:none;width:100% !important;height:auto !import
 
 /* ── STATS + BOTTOM ── */
 .stats-row{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:10px;}
-.pb-wrap{width:280px;height:7px;background:var(--wl);border-radius:4px;overflow:hidden;}
+.pb-wrap{width:240px;height:7px;background:var(--wl);border-radius:4px;overflow:hidden;}
 .pf{height:100%;background:var(--wd);border-radius:4px;transition:width .3s;}
 .piece-count{font-size:22px;color:var(--wd);white-space:nowrap;}
 .bottom-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;}
@@ -123,14 +124,15 @@ canvas{display:block;touch-action:none;width:100% !important;height:auto !import
 /* Modal */
 .ov{display:none;position:fixed;inset:0;background:rgba(74,44,26,.85);z-index:200;align-items:center;justify-content:center;}
 .ov.show{display:flex;}
-.mc{background:var(--paper);padding:40px;text-align:center;max-width:440px;width:90%;border-radius:4px;box-shadow:0 20px 60px rgba(0,0,0,.4);}
-.mct{font-family:'Shippori Mincho',serif;font-size:36px;margin-bottom:8px;}
-.mcs{font-size:18px;color:var(--wd);margin-bottom:20px;line-height:1.8;}
+.mc{background:var(--paper);padding:28px;text-align:center;max-width:440px;width:90%;border-radius:4px;box-shadow:0 20px 60px rgba(0,0,0,.4);}
+.mct{font-family:'Shippori Mincho',serif;font-size:30px;margin-bottom:6px;}
+.mcs{font-size:16px;color:var(--wd);margin-bottom:14px;line-height:1.8;}
 </style>
 </head>
 <body>
 <header>
   <h1>箱根寄木細工体験</h1>
+  <p style="font-size:clamp(11px,2vw,14px);color:var(--wd);margin-top:4px;opacity:.8;">箱根寄木細工のコースター作りに向けて、デザインを考えてみましょう。</p>
 </header>
 
 <div class="wrap">
@@ -178,15 +180,40 @@ canvas{display:block;touch-action:none;width:100% !important;height:auto !import
     <button class="btn btn-s" id="btnClear">✕ 全消去</button>
     <button class="btn btn-p" id="btnDone">完成！</button>
   </div>
+
+  <!-- Footer -->
+  <footer style="text-align:center;margin-top:20px;padding-bottom:8px;">
+    <a href="https://www.kanazashi-woodcraft.com/information.html" target="_blank"
+       style="font-size:13px;color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);padding-bottom:2px;">
+      金指ウッドクラフトで寄木体験を予約する →
+    </a>
+  </footer>
+</div>
+
+<!-- Confirm clear modal -->
+<canvas id="confettiCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:300;display:none;"></canvas>
+<div class="ov" id="ovConfirm">
+  <div class="mc">
+    <div class="mct">全消去しますか？</div>
+    <div class="mcs">置いたピースがすべて消えます。</div>
+    <button class="btn btn-p" id="btnConfirmYes" style="margin-bottom:10px;width:100%">消去する</button><br>
+    <button class="btn btn-s" id="btnConfirmNo" style="width:100%">キャンセル</button>
+  </div>
 </div>
 
 <div class="ov" id="ov">
   <div class="mc">
     <div class="mct">完成！</div>
-    <div class="mcs">あなただけの寄木コースターが<br>できあがりました。</div>
-    <canvas id="thumb" style="max-width:100%;border:2px solid var(--wm);margin-bottom:20px;display:block;margin-left:auto;margin-right:auto;"></canvas><br>
-    <button class="btn btn-p" id="btnDl" style="margin-bottom:9px">画像を保存</button><br>
-    <button class="btn btn-s" id="btnClose">続けて作る</button>
+    <div class="mcs">このデザインをお店で形にしましょう。</div>
+    <canvas id="thumb" style="max-width:100%;border:2px solid var(--wm);margin-bottom:14px;display:block;margin-left:auto;margin-right:auto;"></canvas>
+    <div style="display:flex;gap:8px;margin-bottom:14px;">
+      <button class="btn btn-p" id="btnDl" style="flex:1">画像を保存</button>
+      <button class="btn btn-s" id="btnClose" style="flex:1">続けて作る</button>
+    </div>
+    <a href="https://www.kanazashi-woodcraft.com/information.html" target="_blank"
+       style="font-size:13px;color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);padding-bottom:2px;">
+      金指ウッドクラフトで寄木体験を予約する →
+    </a>
   </div>
 </div>
 
@@ -205,9 +232,12 @@ var globalRotSteps = 1; // 30° default: vertical lines
 var pieces  = [];
 var triMap  = {};
 var nextId  = 1;
+var history = []; // [{action:'add'|'remove', piece}]
 var selShape= null, selColor=null, selCell=null, hoverDir='rh0';
 var eraserMode=false;
 var warnCells={}, WARN_MS=600;
+var fadingPieces=[];
+var FADE_MS=100;
 
 // ── Grid ──────────────────────────────────────────────────────
 var T    = 104;
@@ -216,8 +246,8 @@ var PAD  = 4;
 var CW   = 900;
 var CH   = 900;
 // COLS/ROWS: enough to cover canvas diagonal when rotated (diagonal = CW*√2 ≈ 1273)
-var COLS = Math.ceil(1400/(T/2))+4;
-var ROWS = Math.ceil(1400/H)+4;
+var COLS = Math.ceil(1800/(T/2))+4;
+var ROWS = Math.ceil(1800/H)+4;
 
 function snapToCenter(){
   gridOffX = CW/2 - Math.round((CW/2)/(T/2)) * (T/2);
@@ -340,63 +370,7 @@ function getPreviewCells(cell,shape,dir){
 }
 
 // ── Render ─────────────────────────────────────────────────────
-function render(){
-  ctx.clearRect(0,0,CW,CH);
-  ctx.save();
-  var a=globalRotSteps*Math.PI/6;
-  ctx.translate(CW/2,CH/2);ctx.rotate(a);ctx.translate(-CW/2,-CH/2);
-
-  // bg
-  ctx.fillStyle='#e8ebe6';ctx.fillRect(-CW,-CH,CW*3,CH*3);
-
-  // grid (drawn first, will be covered by piece fills)
-  var cStart = Math.floor(-gridOffX / (T/2)) - 2;
-  var rStart = Math.floor(-gridOffY / H) - 2;
-  var cEnd   = cStart + COLS + 4;
-  var rEnd   = rStart + ROWS + 4;
-  for(var r=rStart;r<rEnd;r++) for(var c=cStart;c<cEnd;c++){
-    var v=getVerts(c,r);
-    ctx.beginPath();ctx.moveTo(v[0].x,v[0].y);ctx.lineTo(v[1].x,v[1].y);ctx.lineTo(v[2].x,v[2].y);ctx.closePath();
-    ctx.strokeStyle='rgba(100,120,100,0.25)';ctx.lineWidth=1.0;ctx.stroke();
-  }
-
-  // pieces: fill completely covers grid lines underneath
-  pieces.forEach(function(piece){
-    piece.keys.forEach(function(key){
-      var p=key.split(',');
-      fillTri(ctx,getVerts(+p[0],+p[1]),piece.color);
-    });
-  });
-
-  // piece outlines (outer edges only)
-  pieces.forEach(function(piece){
-    var cells=piece.keys.map(function(k){var p=k.split(',');return{col:+p[0],row:+p[1]};});
-    drawPieceBorder(ctx,cells);
-  });
-
-  // warn flash
-  var now=Date.now();
-  for(var key in warnCells){
-    if(now-warnCells[key]<WARN_MS){
-      var p=key.split(','),v=getVerts(+p[0],+p[1]);
-      var al=0.5*(1-(now-warnCells[key])/WARN_MS);
-      ctx.save();ctx.globalAlpha=al;
-      ctx.beginPath();ctx.moveTo(v[0].x,v[0].y);ctx.lineTo(v[1].x,v[1].y);ctx.lineTo(v[2].x,v[2].y);ctx.closePath();
-      ctx.fillStyle='#ff3333';ctx.fill();ctx.restore();
-    } else { delete warnCells[key]; }
-  }
-
-  // hover preview
-  if(selShape&&selCell){
-    var pcells=getPreviewCells(selCell,selShape,hoverDir);
-    ctx.globalAlpha=0.45;
-    pcells.forEach(function(cc){fillTri(ctx,getVerts(cc.col,cc.row),selColor);});
-    ctx.globalAlpha=1;
-    drawPieceBorder(ctx,pcells);
-  }
-
-  ctx.restore();
-}
+function render(){ renderWithAnim(); }
 
 function animateWarns(){
   var now=Date.now(),any=false;
@@ -408,7 +382,7 @@ function animateWarns(){
 var woodNamesEl=document.getElementById('woodNames');
 WOODS.forEach(function(w){
   var el=document.createElement('div');
-  el.style.cssText='flex:1;font-size:19px;color:#8b5e3c;text-align:center;white-space:pre;line-height:1.4;display:flex;align-items:flex-end;justify-content:center;';
+  el.style.cssText='flex:1;font-size:clamp(13px,3vw,19px);color:#8b5e3c;text-align:center;white-space:pre;line-height:1.4;display:flex;align-items:flex-end;justify-content:center;';
   el.textContent=w.jp;
   woodNamesEl.appendChild(el);
 });
@@ -486,7 +460,7 @@ canvas.addEventListener('click',function(e){
   }
   if(!selShape) return;
   if(selShape==='rhombus') hoverDir=bestRhDir(cell.col,cell.row,p.x,p.y);
-  doPlace(cell.col,cell.row);render();
+  doPlace(cell.col,cell.row);startAnim();
 });
 
 // Right-click to remove
@@ -500,10 +474,32 @@ function removePieceAt(col,row){
   var key=col+','+row;
   for(var i=pieces.length-1;i>=0;i--){
     if(pieces[i].keys.indexOf(key)>=0){
-      pieces[i].keys.forEach(function(k){delete triMap[k];});
-      pieces.splice(i,1);updateStats();render();return;
+      var piece=pieces[i];
+      piece.keys.forEach(function(k){delete triMap[k];});
+      pieces.splice(i,1);
+      history.push({action:'remove',piece:piece});
+      fadingPieces.push({keys:piece.keys,color:piece.color,removedAt:Date.now()});
+      updateStats();
+      requestAnimationFrame(fadeLoop);
+      return;
     }
   }
+}
+
+function fadeLoop(){
+  var now=Date.now();
+  fadingPieces=fadingPieces.filter(function(fp){
+    var done = now-fp.removedAt >= FADE_MS;
+    if(done && fp.fadeIn && fp.piece){
+      // fadeIn complete: now add to pieces for real
+      pieces.push(fp.piece);
+      fp.piece.keys.forEach(function(k){triMap[k]=fp.piece.color;});
+      updateStats();
+    }
+    return !done;
+  });
+  renderWithAnim();
+  if(fadingPieces.length) requestAnimationFrame(fadeLoop);
 }
 
 function doPlace(col,row){
@@ -517,8 +513,10 @@ function doPlace(col,row){
   });
   if(blocked){requestAnimationFrame(animateWarns);return;}
   var keys=cells.map(function(cc){return cc.col+','+cc.row;});
-  pieces.push({id:nextId++,type:selShape,keys:keys,color:selColor});
+  var piece={id:nextId++,type:selShape,keys:keys,color:selColor};
+  pieces.push(piece);
   keys.forEach(function(k){triMap[k]=selColor;});
+  history.push({action:'add',piece:piece});
   updateStats();
 }
 
@@ -528,67 +526,341 @@ function updateStats(){
   document.getElementById('pf').style.width=Math.min(n/40*100,100)+'%';
 }
 
-// ── Controls ───────────────────────────────────────────────────
-document.getElementById('rotL').addEventListener('click',function(){globalRotSteps=(globalRotSteps-1+12)%12;render();});
-document.getElementById('rotR').addEventListener('click',function(){globalRotSteps=(globalRotSteps+1)%12;render();});
+// ── Animation ──────────────────────────────────────────────────
+// Current animated values
+var animRotAngle = globalRotSteps * Math.PI / 6; // actual drawn angle
+var animGridOffX = gridOffX;
+var animGridOffY = gridOffY;
+var animT        = T;
+var animH        = H;
+var animating    = false;
+var LERP         = 0.18; // smoothing factor (0=instant, 1=no movement)
+
+function lerp(a, b, t){ return a + (b - a) * t; }
+
+function animLoop(){
+  var targetAngle = globalRotSteps * Math.PI / 6;
+  // Shortest path for rotation
+  var da = targetAngle - animRotAngle;
+  while(da >  Math.PI) da -= Math.PI*2;
+  while(da < -Math.PI) da += Math.PI*2;
+  animRotAngle += da * LERP;
+
+  animGridOffX = lerp(animGridOffX, gridOffX, LERP);
+  animGridOffY = lerp(animGridOffY, gridOffY, LERP);
+  animT        = lerp(animT, T, LERP);
+  animH        = animT * Math.sqrt(3) / 2;
+
+  var done = Math.abs(da) < 0.001
+          && Math.abs(animGridOffX - gridOffX) < 0.2
+          && Math.abs(animGridOffY - gridOffY) < 0.2
+          && Math.abs(animT - T) < 0.2;
+
+  renderWithAnim();
+
+  if(!done) requestAnimationFrame(animLoop);
+  else {
+    animRotAngle = targetAngle;
+    animGridOffX = gridOffX;
+    animGridOffY = gridOffY;
+    animT = T; animH = H;
+    animating = false;
+    renderWithAnim();
+  }
+}
+
+function startAnim(){
+  if(!animating){ animating=true; requestAnimationFrame(animLoop); }
+}
+
+// renderWithAnim uses animated values instead of live values
+function renderWithAnim(){
+  var savedRotSteps = globalRotSteps;
+  var savedOffX = gridOffX, savedOffY = gridOffY;
+  var savedT = T, savedH = H;
+
+  // Temporarily override with animated values
+  var _angle = animRotAngle;
+  gridOffX = animGridOffX; gridOffY = animGridOffY;
+  T = animT; H = animH;
+  COLS = Math.ceil(1800/(T/2))+4;
+  ROWS = Math.ceil(1800/H)+4;
+
+  ctx.clearRect(0,0,CW,CH);
+  ctx.save();
+  ctx.translate(CW/2,CH/2); ctx.rotate(_angle); ctx.translate(-CW/2,-CH/2);
+
+  ctx.fillStyle='#e8ebe6'; ctx.fillRect(-CW,-CH,CW*3,CH*3);
+
+  var margin = Math.ceil(CW*1.5/(T/2));
+  var cStart = Math.floor(-gridOffX/(T/2))-margin;
+  var cEnd   = Math.ceil((CW-gridOffX)/(T/2))+margin;
+  var rStart = Math.floor(-gridOffY/H)-margin;
+  var rEnd   = Math.ceil((CH-gridOffY)/H)+margin;
+  for(var r=rStart;r<rEnd;r++) for(var c=cStart;c<cEnd;c++){
+    var v=getVerts(c,r);
+    ctx.beginPath();ctx.moveTo(v[0].x,v[0].y);ctx.lineTo(v[1].x,v[1].y);ctx.lineTo(v[2].x,v[2].y);ctx.closePath();
+    ctx.strokeStyle='rgba(100,120,100,0.25)';ctx.lineWidth=1.0;ctx.stroke();
+  }
+
+  pieces.forEach(function(piece){
+    piece.keys.forEach(function(key){
+      var p=key.split(','); fillTri(ctx,getVerts(+p[0],+p[1]),piece.color);
+    });
+  });
+  pieces.forEach(function(piece){
+    var cells=piece.keys.map(function(k){var p=k.split(',');return{col:+p[0],row:+p[1]};});
+    drawPieceBorder(ctx,cells);
+  });
+
+  // fading pieces (deleted, fading out)
+  var now2=Date.now();
+  fadingPieces.forEach(function(fp){
+    var elapsed=now2-fp.removedAt;
+
+    if(!fp.clearAnim){
+      // Normal fade in/out
+      var t=elapsed/FADE_MS;
+      var alpha=fp.fadeIn ? Math.min(t,1)*0.9 : (1-Math.min(t,1))*0.9;
+      if(alpha<=0) return;
+      ctx.globalAlpha=alpha;
+      fp.keys.forEach(function(key){
+        var p=key.split(','); fillTri(ctx,getVerts(+p[0],+p[1]),fp.color);
+      });
+      var cells=fp.keys.map(function(k){var p=k.split(',');return{col:+p[0],row:+p[1]};});
+      drawPieceBorder(ctx,cells);
+      ctx.globalAlpha=1;
+      return;
+    }
+
+    // Scatter animation
+    var t=Math.min(elapsed/fp.animMs,1);
+    var alpha=t>0.8 ? 1-(t-0.8)/0.2 : 1;
+    if(alpha<=0) return;
+
+    var tx=fp.vx*elapsed*0.5 + fp.vx*elapsed*elapsed*0.003;
+    var ty=fp.vy*elapsed*0.5 + fp.vy*elapsed*elapsed*0.003;
+    var rot=fp.spin*elapsed*0.05 + fp.spin*elapsed*elapsed*0.0003;
+
+    ctx.save();
+    ctx.globalAlpha=alpha;
+    ctx.translate(fp.cx+tx, fp.cy+ty);
+    ctx.rotate(rot);
+    ctx.translate(-fp.cx, -fp.cy);
+    fp.keys.forEach(function(key){
+      var p=key.split(','); fillTri(ctx,getVerts(+p[0],+p[1]),fp.color);
+    });
+    ctx.restore();
+  });
+
+  var now=Date.now();
+  for(var key in warnCells){
+    if(now-warnCells[key]<WARN_MS){
+      var p=key.split(','),v=getVerts(+p[0],+p[1]);
+      var al=0.5*(1-(now-warnCells[key])/WARN_MS);
+      ctx.save();ctx.globalAlpha=al;
+      ctx.beginPath();ctx.moveTo(v[0].x,v[0].y);ctx.lineTo(v[1].x,v[1].y);ctx.lineTo(v[2].x,v[2].y);ctx.closePath();
+      ctx.fillStyle='#ff3333';ctx.fill();ctx.restore();
+    } else { delete warnCells[key]; }
+  }
+
+  if(selShape&&selCell){
+    var pcells=getPreviewCells(selCell,selShape,hoverDir);
+    ctx.globalAlpha=0.45;
+    pcells.forEach(function(cc){fillTri(ctx,getVerts(cc.col,cc.row),selColor);});
+    ctx.globalAlpha=1;
+    drawPieceBorder(ctx,pcells);
+  }
+
+  ctx.restore();
+
+  // Restore live values
+  gridOffX=savedOffX; gridOffY=savedOffY; T=savedT; H=savedH;
+  COLS=Math.ceil(1800/(T/2))+4; ROWS=Math.ceil(1800/H)+4;
+}
+document.getElementById('rotL').addEventListener('click',function(){globalRotSteps=(globalRotSteps-1+12)%12;startAnim();});
+document.getElementById('rotR').addEventListener('click',function(){globalRotSteps=(globalRotSteps+1)%12;startAnim();});
 
 // Zoom: 5 steps, 88 is center (index 2)
 var T_STEPS=[56,80,104,128,152];
 var tIdx=2; // default T=104
 
 function applyZoom(newT){
-  // Record canvas center in grid coords BEFORE zoom
   var fx = (CW/2 - gridOffX) / (T/2);
   var fy = (CH/2 - gridOffY) / H;
-
   T = newT;
   H = T*Math.sqrt(3)/2;
-  COLS = Math.ceil(1400/(T/2))+4;
-  ROWS = Math.ceil(1400/H)+4;
-
-  // Restore: same grid coord stays at canvas center AFTER zoom
+  COLS = Math.ceil(1800/(T/2))+4;
+  ROWS = Math.ceil(1800/H)+4;
   gridOffX = CW/2 - fx * (T/2);
   gridOffY = CH/2 - fy * H;
-  render();
+  startAnim();
 }
 
-// Move: translate screen direction to canvas (pre-rotation) coords
-// screen dir (dx_s, dy_s) -> canvas dir = R(-angle) * (dx_s, dy_s)
+// Move
 function moveGrid(dx_screen, dy_screen){
   var a = globalRotSteps * Math.PI / 6;
   var co = Math.cos(-a), si = Math.sin(-a);
-  var dx_c = co*dx_screen - si*dy_screen;
-  var dy_c = si*dx_screen + co*dy_screen;
-  gridOffX += dx_c * T;
-  gridOffY += dy_c * T;
-  render();
+  gridOffX += (co*dx_screen - si*dy_screen) * T;
+  gridOffY += (si*dx_screen + co*dy_screen) * T;
+  startAnim();
 }
-document.getElementById('moveUp').addEventListener('click',    function(){ moveGrid( 0, -1); });
-document.getElementById('moveDown').addEventListener('click',  function(){ moveGrid( 0,  1); });
-document.getElementById('moveLeft').addEventListener('click',  function(){ moveGrid(-1,  0); });
-document.getElementById('moveRight').addEventListener('click', function(){ moveGrid( 1,  0); });
+document.getElementById('moveUp').addEventListener('click',    function(){ moveGrid( 0,  1); });
+document.getElementById('moveDown').addEventListener('click',  function(){ moveGrid( 0, -1); });
+document.getElementById('moveLeft').addEventListener('click',  function(){ moveGrid( 1,  0); });
+document.getElementById('moveRight').addEventListener('click', function(){ moveGrid(-1,  0); });
+
+function updateZoomButtons(){
+  document.getElementById('zoomIn').disabled  = tIdx>=T_STEPS.length-1;
+  document.getElementById('zoomOut').disabled = tIdx<=0;
+}
 
 document.getElementById('zoomIn').addEventListener('click',function(){
   if(tIdx>=T_STEPS.length-1) return;
-  tIdx++; applyZoom(T_STEPS[tIdx]);
+  tIdx++; applyZoom(T_STEPS[tIdx]); updateZoomButtons();
 });
 document.getElementById('zoomOut').addEventListener('click',function(){
   if(tIdx<=0) return;
-  tIdx--; applyZoom(T_STEPS[tIdx]);
+  tIdx--; applyZoom(T_STEPS[tIdx]); updateZoomButtons();
 });
+updateZoomButtons();
 document.getElementById('btnUndo').addEventListener('click',function(){
-  if(!pieces.length) return;var p=pieces.pop();
-  p.keys.forEach(function(k){delete triMap[k];});updateStats();render();
+  if(!history.length) return;
+  var entry=history.pop();
+  if(entry.action==='add'){
+    // undo add: remove the piece
+    var idx=pieces.indexOf(entry.piece);
+    if(idx>=0) pieces.splice(idx,1);
+    entry.piece.keys.forEach(function(k){delete triMap[k];});
+    fadingPieces.push({keys:entry.piece.keys,color:entry.piece.color,removedAt:Date.now()});
+    updateStats();requestAnimationFrame(fadeLoop);
+  } else {
+    // undo remove: fade in, then add to pieces after animation
+    fadingPieces.push({keys:entry.piece.keys,color:entry.piece.color,removedAt:Date.now(),fadeIn:true,piece:entry.piece});
+    updateStats();requestAnimationFrame(fadeLoop);
+  }
 });
-document.getElementById('btnClear').addEventListener('click',function(){pieces=[];triMap={};updateStats();render();});
+document.getElementById('btnClear').addEventListener('click',function(){
+  document.getElementById('ovConfirm').classList.add('show');
+});
+document.getElementById('btnConfirmYes').addEventListener('click',function(){
+  var now=Date.now();
+  var ANIM_MS=2000;
+
+  pieces.forEach(function(piece){
+    piece.keys.forEach(function(k){delete triMap[k];});
+    var ct=getCenter(+piece.keys[0].split(',')[0], +piece.keys[0].split(',')[1]);
+    var angle=Math.random()*Math.PI*2;
+    var spd=0.1+Math.random()*0.5;
+    fadingPieces.push({
+      keys:piece.keys, color:piece.color, removedAt:now,
+      clearAnim:true, animMs:ANIM_MS,
+      cx:ct.x, cy:ct.y,
+      vx:Math.cos(angle)*spd,
+      vy:Math.sin(angle)*spd,
+      spin:(Math.random()-0.5)*0.1
+    });
+  });
+
+  pieces=[];history=[];updateStats();
+  requestAnimationFrame(clearAnimLoop);
+  document.getElementById('ovConfirm').classList.remove('show');
+});
+
+var clearAnimLooping=false;
+function clearAnimLoop(){
+  var now=Date.now();
+  fadingPieces=fadingPieces.filter(function(fp){
+    return fp.clearAnim ? now-fp.removedAt<fp.animMs : now-fp.removedAt<FADE_MS;
+  });
+  renderWithAnim();
+  if(fadingPieces.length) requestAnimationFrame(clearAnimLoop);
+}
+document.getElementById('btnConfirmNo').addEventListener('click',function(){
+  document.getElementById('ovConfirm').classList.remove('show');
+});
+document.getElementById('ovConfirm').addEventListener('click',function(e){
+  if(e.target===this) this.classList.remove('show');
+});
+// ── Confetti ───────────────────────────────────────────────────
+var confettiCanvas=document.getElementById('confettiCanvas');
+var confetti=[];
+var confettiGen=0; // increment to invalidate old loops
+
+function launchConfetti(){
+  var myGen=++confettiGen;
+  confettiCanvas.width=window.innerWidth;
+  confettiCanvas.height=window.innerHeight;
+  confettiCanvas.style.display='block';
+  var cc=confettiCanvas.getContext('2d');
+  var colors=WOODS.map(function(w){return w.color;});
+  var W=confettiCanvas.width, H2=confettiCanvas.height;
+  var pieces2=[];
+  for(var i=0;i<120;i++){
+    var shape=Math.random()<0.5?'tri':'rh';
+    var color=colors[Math.floor(Math.random()*colors.length)];
+    var size=14+Math.random()*18;
+    pieces2.push({
+      x: Math.random()*W,
+      y: -size - Math.random()*H2*0.5,
+      vx: (Math.random()-0.5)*3,
+      vy: 1.5+Math.random()*3,
+      spin: (Math.random()-0.5)*0.08,
+      angle: Math.random()*Math.PI*2,
+      size: size, shape: shape, color: color,
+      delay: Math.random()*800
+    });
+  }
+  var startTime=Date.now();
+  (function loop(){
+    if(confettiGen!==myGen){ cc.clearRect(0,0,W,H2); return; } // killed
+    var elapsed=Date.now()-startTime;
+    cc.clearRect(0,0,W,H2);
+    var any=false;
+    pieces2.forEach(function(p){
+      if(elapsed<p.delay){any=true;return;}
+      p.x+=p.vx; p.y+=p.vy; p.vy+=0.06; p.angle+=p.spin;
+      if(p.y<H2+50) any=true;
+      drawConfettiPiece(cc,p);
+    });
+    if(any) requestAnimationFrame(loop);
+    else confettiCanvas.style.display='none';
+  })();
+}
+
+function drawConfettiPiece(c2d,p){
+  if(p.y>confettiCanvas.height+50) return;
+  c2d.save();
+  c2d.translate(p.x,p.y);
+  c2d.rotate(p.angle);
+  c2d.fillStyle=p.color;
+  c2d.strokeStyle='rgba(0,0,0,0.25)';
+  c2d.lineWidth=0.6;
+  var s=p.size, h=s*Math.sqrt(3)/2;
+  c2d.beginPath();
+  if(p.shape==='tri'){
+    c2d.moveTo(0,-h*0.67); c2d.lineTo(s/2,h*0.33); c2d.lineTo(-s/2,h*0.33);
+  } else {
+    c2d.moveTo(-s/2,h/2); c2d.lineTo(s/4,h/2); c2d.lineTo(s/2,-h/2); c2d.lineTo(-s/4,-h/2);
+  }
+  c2d.closePath();
+  c2d.fill(); c2d.stroke();
+  c2d.restore();
+}
+
 document.getElementById('btnDone').addEventListener('click',function(){
   document.getElementById('ov').classList.add('show');
   var thumb=document.getElementById('thumb');
   thumb.width=CW; thumb.height=CH;
   thumb.style.width='100%'; thumb.style.height='auto';
   thumb.getContext('2d').drawImage(canvas,0,0,CW,CH,0,0,CW,CH);
+  launchConfetti();
 });
-document.getElementById('btnClose').addEventListener('click',function(){document.getElementById('ov').classList.remove('show');});
+document.getElementById('btnClose').addEventListener('click',function(){
+  document.getElementById('ov').classList.remove('show');
+  confettiGen++; // stop confetti
+  confettiCanvas.style.display='none';
+});
 document.getElementById('btnDl').addEventListener('click',function(){
   var a=document.createElement('a');a.download='yosegi.png';a.href=canvas.toDataURL();a.click();
 });
