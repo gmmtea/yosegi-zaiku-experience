@@ -697,12 +697,37 @@ function applyZoom(newT){
   startAnim();
 }
 
-// Move
+// Move: step size depends on direction relative to grid orientation
+// Grid has period T in x (=T/2 per col) and H in y.
+// We want: T-direction moves by T, H-direction moves by H.
+// Then snap center to nearest vertex or edge midpoint.
+function snapGridCenter(){
+  // Candidate snap points in x: multiples of T/2 (vertices and edge midpoints)
+  // Candidate snap points in y: multiples of H/2 (vertices at 0,H,2H... and edge midpoints at H/2,3H/2...)
+  // Actually: grid vertices at x=gridOffX+n*(T/2), y=gridOffY+m*H
+  // Edge midpoints (horizontal edges) at same x, y=gridOffY+m*H+H/2
+  // So y candidates: gridOffY + k*(H/2) for integer k
+  // x candidates: gridOffX + n*(T/2)
+  // Snap CW/2 to nearest x candidate, CH/2 to nearest y candidate
+  gridOffX = CW/2 - Math.round((CW/2 - gridOffX)/(T/2)) * (T/2);
+  gridOffY = CH/2 - Math.round((CH/2 - gridOffY)/(H/2)) * (H/2);
+}
+
 function moveGrid(dx_screen, dy_screen){
   var a = globalRotSteps * Math.PI / 6;
-  var co = Math.cos(-a), si = Math.sin(-a);
-  gridOffX += (co*dx_screen - si*dy_screen) * T;
-  gridOffY += (si*dx_screen + co*dy_screen) * T;
+  // Vertical buttons (up/down, dy_screen!=0): odd rot=T, even rot=H
+  // Horizontal buttons (left/right, dx_screen!=0): odd rot=H, even rot=T
+  var isVertical = dy_screen !== 0;
+  var S;
+  if(isVertical){
+    S = (globalRotSteps % 2 === 1) ? T : H;
+  } else {
+    S = (globalRotSteps % 2 === 1) ? H : T;
+  }
+  var dcx = (Math.cos(-a)*dx_screen - Math.sin(-a)*dy_screen) * S;
+  var dcy = (Math.sin(-a)*dx_screen + Math.cos(-a)*dy_screen) * S;
+  gridOffX += dcx;
+  gridOffY += dcy;
   startAnim();
 }
 document.getElementById('moveUp').addEventListener('click',    function(){ moveGrid( 0,  1); });
