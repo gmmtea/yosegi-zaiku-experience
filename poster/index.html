@@ -239,12 +239,17 @@ canvas#phoneCanvas {
 
       <div class="qr-row">
         <div class="qr-box">
-          <canvas id="qrCanvas" width="70" height="70"></canvas>
+          <!-- ▼▼▼ QRコード画像をここに差し替え ▼▼▼ -->
+          <img id="qrImg" src="" alt="QR" width="80" height="80"
+               style="width:80px;height:80px;object-fit:contain;display:block;"/>
+          <!-- ▲▲▲ QRコード画像をここに差し替え ▲▲▲ -->
         </div>
         <div class="qr-text">
           <div class="qr-label">アクセス</div>
           <div class="qr-main">QRコードを読み取って<br>デザインを始める</div>
-          <div class="qr-url">https://yosegi.example.com</div>
+          <!-- ▼▼▼ URLをここに差し替え ▼▼▼ -->
+          <div class="qr-url">https://yosegi-zaiku-experience.vercel.app/</div>
+          <!-- ▲▲▲ URLをここに差し替え ▲▲▲ -->
         </div>
       </div>
     </div>
@@ -256,7 +261,10 @@ canvas#phoneCanvas {
           <div class="notch-cam"></div>
         </div>
         <div class="phone-screen">
-          <canvas id="phoneCanvas" width="200" height="420"></canvas>
+          <!-- ▼▼▼ スマホ画面のスクリーンショットをここに差し替え（200×420px推奨） ▼▼▼ -->
+          <img id="phoneImg" src="" alt="app screen" width="200" height="420"
+               style="width:200px;height:420px;object-fit:cover;display:block;"/>
+          <!-- ▲▲▲ スマホ画面のスクリーンショットをここに差し替え ▲▲▲ -->
         </div>
         <div class="phone-home"></div>
       </div>
@@ -267,157 +275,14 @@ canvas#phoneCanvas {
   <div class="poster-footer">
     <div class="footer-shop">金指ウッドクラフト</div>
     <div class="footer-info">
-      神奈川県足柄下郡箱根町畑宿103　TEL: 0460-85-8477<br>
-      受付時間 11:00〜 / 12:30〜 / 14:00〜　月・水曜定休
+      神奈川県足柄下郡箱根町畑宿103　　kanazashi-woodcraft.com
     </div>
   </div>
 
 </div>
 
-<script>
-// ── Phone screen: draw app UI ─────────────────────────────────
-(function(){
-  var c = document.getElementById('phoneCanvas');
-  var ctx = c.getContext('2d');
-  var W = 200, H2 = 420;
 
-  // App background
-  ctx.fillStyle = '#f5ede0';
-  ctx.fillRect(0, 0, W, H2);
-
-  // Header
-  ctx.fillStyle = '#4a2c1a';
-  ctx.fillRect(0, 0, W, 36);
-  ctx.fillStyle = '#f5ede0';
-  ctx.font = 'bold 11px serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('箱根寄木細工体験', W/2, 23);
-
-  // Palette area
-  var palY = 40;
-  var WOODS = [
-    {name:'ミズキ',    color:'#e8d8bb'},
-    {name:'ホオノキ',  color:'#bfa96e'},
-    {name:'ウルシ',    color:'#c8a800'},
-    {name:'チャンチン',color:'#c85a3a'},
-    {name:'ウォール',  color:'#6a5858'},
-  ];
-  var cellW = 34, gap = 3, totalW = WOODS.length*(cellW+gap)-gap;
-  var startX = (W-totalW)/2;
-
-  // tri row
-  WOODS.forEach(function(w,i){
-    var x = startX + i*(cellW+gap);
-    ctx.fillStyle = 'white'; ctx.strokeStyle = '#c9a96e'; ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.roundRect(x, palY, cellW, 38, 3); ctx.fill(); ctx.stroke();
-    // triangle shape
-    ctx.fillStyle = w.color;
-    ctx.beginPath();
-    ctx.moveTo(x+cellW/2, palY+5);
-    ctx.lineTo(x+cellW-4, palY+28);
-    ctx.lineTo(x+4, palY+28);
-    ctx.closePath(); ctx.fill();
-  });
-
-  // rh row
-  var palY2 = palY + 44;
-  WOODS.forEach(function(w,i){
-    var x = startX + i*(cellW+gap);
-    ctx.fillStyle = 'white'; ctx.strokeStyle = '#c9a96e'; ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.roundRect(x, palY2, cellW, 38, 3); ctx.fill(); ctx.stroke();
-    // rhombus shape
-    ctx.fillStyle = w.color;
-    ctx.beginPath();
-    ctx.moveTo(x+8, palY2+12); ctx.lineTo(x+cellW-2, palY2+12);
-    ctx.lineTo(x+cellW-8, palY2+30); ctx.lineTo(x+2, palY2+30);
-    ctx.closePath(); ctx.fill();
-  });
-
-  // Canvas area
-  var cvY = palY2 + 48;
-  var cvH = H2 - cvY - 44;
-
-  // Draw mini yosegi grid
-  var T = 18, Hg = T*Math.sqrt(3)/2;
-  var offX2 = 0, offY2 = cvY;
-
-  ctx.fillStyle = '#e8ebe6';
-  ctx.fillRect(0, cvY, W, cvH);
-
-  // Grid
-  ctx.strokeStyle='rgba(100,120,100,0.2)'; ctx.lineWidth=0.4;
-  for(var r=-1;r<Math.ceil(cvH/Hg)+2;r++){
-    for(var col=-1;col<Math.ceil(W/(T/2))+2;col++){
-      var x0 = offX2 + col*T/2 - T/2;
-      var y0 = offY2 + r*Hg;
-      var up = (col+r)%2===0;
-      var v = up ? [[x0+T/2,y0],[x0+T,y0+Hg],[x0,y0+Hg]]
-                 : [[x0,y0],[x0+T,y0],[x0+T/2,y0+Hg]];
-      ctx.beginPath(); ctx.moveTo(v[0][0],v[0][1]); ctx.lineTo(v[1][0],v[1][1]); ctx.lineTo(v[2][0],v[2][1]); ctx.closePath(); ctx.stroke();
-    }
-  }
-
-  // Pieces - pinwheel pattern
-  var colors2 = ['#e8d8bb','#bfa96e','#c8a800','#c85a3a','#6a5858'];
-  ctx.save();
-  ctx.rect(0, cvY, W, cvH); ctx.clip();
-  for(var r=-1;r<Math.ceil(cvH/Hg)+2;r++){
-    for(var col=-1;col<Math.ceil(W/(T/2))+2;col++){
-      var x0 = offX2 + col*T/2 - T/2;
-      var y0 = offY2 + r*Hg;
-      var up = (col+r)%2===0;
-      var v = up ? [[x0+T/2,y0],[x0+T,y0+Hg],[x0,y0+Hg]]
-                 : [[x0,y0],[x0+T,y0],[x0+T/2,y0+Hg]];
-      var cx2=(v[0][0]+v[1][0]+v[2][0])/3, cy2=(v[0][1]+v[1][1]+v[2][1])/3;
-      var dx=cx2-W/2, dy=cy2-(cvY+cvH/2);
-      var angle=Math.atan2(dy,dx);
-      var seg=((Math.floor((angle+Math.PI)/(Math.PI/3))%6)+6)%6;
-      ctx.fillStyle=colors2[seg%colors2.length];
-      ctx.beginPath(); ctx.moveTo(v[0][0],v[0][1]); ctx.lineTo(v[1][0],v[1][1]); ctx.lineTo(v[2][0],v[2][1]); ctx.closePath(); ctx.fill();
-      ctx.strokeStyle='rgba(255,255,255,0.3)'; ctx.lineWidth=0.4; ctx.stroke();
-    }
-  }
-  ctx.restore();
-
-  // Canvas border overlay buttons suggestion
-  ctx.fillStyle='rgba(255,248,240,0.88)';
-  ctx.strokeStyle='#c9a96e'; ctx.lineWidth=1;
-  // bottom buttons
-  [[8,cvY+cvH-36,32,32],[W-40,cvY+cvH-36,32,32]].forEach(function(b){
-    ctx.beginPath(); ctx.roundRect(b[0],b[1],b[2],b[3],5); ctx.fill(); ctx.stroke();
-  });
-  ctx.fillStyle='#8b5e3c'; ctx.font='16px sans-serif'; ctx.textAlign='center';
-  ctx.fillText('↺', 24, cvY+cvH-14);
-  ctx.fillText('↻', W-24, cvY+cvH-14);
-
-  // Bottom bar
-  ctx.fillStyle='#4a2c1a';
-  ctx.fillRect(0, H2-44, W, 44);
-  ctx.fillStyle='white'; ctx.font='bold 11px serif'; ctx.textAlign='center';
-  ctx.fillText('完成！', W/2-28, H2-16);
-  ctx.fillStyle='rgba(255,255,255,0.5)'; ctx.font='10px serif';
-  ctx.fillText('ピース: 18/40', W/2+30, H2-17);
-})();
-
-// ── Fake QR ───────────────────────────────────────────────────
-(function(){
-  var c = document.getElementById('qrCanvas');
-  var ctx = c.getContext('2d');
-  var S = 70; var modules = 21; var cell = S/modules;
-  ctx.fillStyle='white'; ctx.fillRect(0,0,S,S);
-
-  function sq(x,y,s,col){ ctx.fillStyle=col||'#1a1a1a'; ctx.fillRect(x*cell,y*cell,s*cell,s*cell); }
-  function finder(ox,oy){ sq(ox,oy,7); sq(ox+1,oy+1,5,'white'); sq(ox+2,oy+2,3); }
-  finder(0,0); finder(14,0); finder(0,14);
-
-  var seed=42;
-  function rand(){seed=(seed*1664525+1013904223)&0xffffffff;return(seed>>>0)/4294967296;}
-  for(var r=0;r<modules;r++) for(var col=0;col<modules;col++){
-    if((r<8&&col<8)||(r<8&&col>12)||(r>12&&col<8)) continue;
-    if(rand()>0.5) sq(col,r,1);
-  }
-  for(var i=8;i<13;i++){ if(i%2===0){sq(i,6,1);sq(6,i,1);} }
-})();
-</script>
+</body>
+</html>
 </body>
 </html>
