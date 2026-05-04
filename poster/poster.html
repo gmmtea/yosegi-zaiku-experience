@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>寄木細工体験ポスター</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;700;800&family=Noto+Serif+JP:wght@300;400;700&display=swap');
+@media print {
+  body { background: white; padding: 0; }
+  .poster { box-shadow: none; }
+}
+
+body {
+  background: #2a2a2a;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 0;
+  margin: 0;
+  min-height: 100vh;
+}
+
+/* A4 at 96dpi = 794×1123px */
+.poster {
+  width: 794px;
+  height: 1123px;
+  background: #f5ede0;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Noto Serif JP', serif;
+  flex-shrink: 0;
+}
+
+/* === GEO BACKGROUND === */
+.geo-bg {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+}
+
+/* === HEADER === */
+.header-band {
+  position: relative; z-index: 2;
+  background: #4a2c1a;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.shop-name-header {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 20px; color: #c9a96e; letter-spacing: 0.3em;
+}
+.tagline-header {
+  font-size: 13px; color: rgba(201,169,110,0.7); letter-spacing: 0.15em;
+}
+
+/* === BODY LAYOUT: text left, phone right === */
+.body-layout {
+  position: relative; z-index: 2;
+  display: flex;
+  align-items: center;
+  padding: 50px 48px 40px;
+  gap: 40px;
+}
+
+/* Left column */
+.left-col { flex: 1; }
+
+.eyebrow {
+  font-size: 15px; letter-spacing: 0.4em; color: #8b5e3c;
+  text-transform: uppercase; margin-bottom: 14px;
+}
+.main-title {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 72px; font-weight: 800;
+  color: #4a2c1a; line-height: 1.1;
+  letter-spacing: 0.06em; margin-bottom: 8px;
+}
+.sub-title {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 26px; color: #8b5e3c;
+  letter-spacing: 0.2em; margin-bottom: 28px;
+}
+.desc-text {
+  font-size: 17px; color: #4a2c1a;
+  line-height: 2.0; margin-bottom: 32px;
+}
+
+/* Steps */
+.steps { margin-bottom: 36px; }
+.steps-label {
+  font-size: 13px; letter-spacing: 0.35em; color: #8b5e3c;
+  text-transform: uppercase; margin-bottom: 12px;
+  padding-bottom: 6px; border-bottom: 1px solid #c9a96e;
+}
+.step-row {
+  display: flex; align-items: flex-start;
+  gap: 12px; margin-bottom: 12px;
+}
+.step-num {
+  width: 26px; height: 26px; background: #4a2c1a;
+  color: #f5ede0; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-family: 'Shippori Mincho', serif; flex-shrink: 0;
+}
+.step-text { font-size: 16px; color: #4a2c1a; line-height: 1.7; padding-top: 2px; }
+
+/* QR section */
+.qr-row {
+  display: flex; align-items: center; gap: 20px;
+  background: #4a2c1a; border-radius: 8px;
+  padding: 20px 24px;
+}
+.qr-box {
+  width: 90px; height: 90px; background: white;
+  border-radius: 4px; padding: 5px; flex-shrink: 0;
+}
+canvas#qrCanvas { width: 80px; height: 80px; image-rendering: pixelated; }
+.qr-text {}
+.qr-label { font-size: 12px; color: #c9a96e; letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 6px; }
+.qr-main { font-family: 'Shippori Mincho', serif; font-size: 19px; color: #f5ede0; line-height: 1.5; margin-bottom: 6px; }
+.qr-url { font-size: 12px; color: rgba(201,169,110,0.7); font-family: monospace; }
+
+/* Right column: smartphone mockup */
+.right-col { flex-shrink: 0; }
+
+.phone {
+  width: 220px;
+  background: #1a1a1a;
+  border-radius: 36px;
+  padding: 14px 10px;
+  box-shadow:
+    0 0 0 2px #333,
+    0 20px 60px rgba(0,0,0,0.5),
+    inset 0 0 0 1px #444;
+  position: relative;
+}
+.phone-notch {
+  width: 80px; height: 22px;
+  background: #1a1a1a;
+  border-radius: 0 0 14px 14px;
+  margin: 0 auto 8px;
+  position: relative; z-index: 2;
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px;
+}
+.notch-cam {
+  width: 8px; height: 8px;
+  background: #2a2a2a; border-radius: 50%;
+  border: 1px solid #333;
+}
+.phone-screen {
+  border-radius: 24px;
+  overflow: hidden;
+  background: #e8ebe6;
+}
+canvas#phoneCanvas {
+  display: block;
+  width: 200px;
+  height: 420px;
+}
+.phone-home {
+  width: 60px; height: 4px;
+  background: #444; border-radius: 2px;
+  margin: 10px auto 0;
+}
+
+/* === FOOTER === */
+.poster-footer {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  z-index: 2;
+  background: #e8d5b7;
+  padding: 14px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 2px solid #c9a96e;
+}
+.footer-shop {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 20px; font-weight: 700; color: #4a2c1a; letter-spacing: 0.1em;
+}
+.footer-info {
+  font-size: 13px; color: #8b5e3c; text-align: right; line-height: 1.7;
+}
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <!-- Geo background -->
+  <svg class="geo-bg" viewBox="0 0 794 1123" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <pattern id="tp" x="0" y="0" width="52" height="45" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+        <line x1="0" y1="45" x2="26" y2="0" stroke="rgba(139,94,60,0.07)" stroke-width="0.7"/>
+        <line x1="26" y1="0" x2="52" y2="45" stroke="rgba(139,94,60,0.07)" stroke-width="0.7"/>
+        <line x1="0" y1="45" x2="52" y2="45" stroke="rgba(139,94,60,0.07)" stroke-width="0.7"/>
+        <line x1="0" y1="0" x2="26" y2="45" stroke="rgba(139,94,60,0.07)" stroke-width="0.7"/>
+        <line x1="52" y1="0" x2="26" y2="45" stroke="rgba(139,94,60,0.07)" stroke-width="0.7"/>
+        <line x1="0" y1="0" x2="52" y2="0" stroke="rgba(139,94,60,0.07)" stroke-width="0.7"/>
+      </pattern>
+    </defs>
+    <rect width="794" height="1123" fill="url(#tp)"/>
+    <polygon points="0,0 160,0 0,160" fill="rgba(139,94,60,0.05)"/>
+    <polygon points="794,1123 634,1123 794,963" fill="rgba(139,94,60,0.05)"/>
+    <polygon points="794,0 554,0 794,240" fill="rgba(201,169,110,0.07)"/>
+    <polygon points="0,1123 0,883 240,1123" fill="rgba(201,169,110,0.07)"/>
+  </svg>
+
+  <!-- Header -->
+  <div class="header-band">
+    <div class="shop-name-header">金指ウッドクラフト</div>
+    <div class="tagline-header">KANAZASHI WOODCRAFT · 箱根畑宿</div>
+  </div>
+
+  <!-- Body -->
+  <div class="body-layout">
+    <!-- Left -->
+    <div class="left-col">
+      <div class="eyebrow">体験前の準備に</div>
+      <div class="main-title">箱根<br>寄木細工</div>
+      <div class="sub-title">デザインシミュレーター</div>
+      <div class="desc-text">
+        コースター作り体験の前に、<br>
+        スマホでデザインをシミュレーション。<br>
+        <span style="font-size:12px;color:#8b5e3c;">木材の種類・形・模様を自由に組み合わせて。</span>
+      </div>
+
+      <div class="steps">
+        <div class="steps-label">使い方</div>
+        <div class="step-row"><div class="step-num">1</div><div class="step-text">QRコードを読み取ってアクセス</div></div>
+        <div class="step-row"><div class="step-num">2</div><div class="step-text">木材とピースの形を選んでタップして配置</div></div>
+        <div class="step-row"><div class="step-num">3</div><div class="step-text">「完成！」でデザインを画像として保存</div></div>
+        <div class="step-row"><div class="step-num">4</div><div class="step-text">そのデザインを参考にお店の体験へ</div></div>
+      </div>
+
+      <div class="qr-row">
+        <div class="qr-box">
+          <canvas id="qrCanvas" width="70" height="70"></canvas>
+        </div>
+        <div class="qr-text">
+          <div class="qr-label">アクセス</div>
+          <div class="qr-main">QRコードを読み取って<br>デザインを始める</div>
+          <div class="qr-url">https://yosegi.example.com</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: phone -->
+    <div class="right-col">
+      <div class="phone">
+        <div class="phone-notch">
+          <div class="notch-cam"></div>
+        </div>
+        <div class="phone-screen">
+          <canvas id="phoneCanvas" width="200" height="420"></canvas>
+        </div>
+        <div class="phone-home"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="poster-footer">
+    <div class="footer-shop">金指ウッドクラフト</div>
+    <div class="footer-info">
+      神奈川県足柄下郡箱根町畑宿103　TEL: 0460-85-8477<br>
+      受付時間 11:00〜 / 12:30〜 / 14:00〜　月・水曜定休
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── Phone screen: draw app UI ─────────────────────────────────
+(function(){
+  var c = document.getElementById('phoneCanvas');
+  var ctx = c.getContext('2d');
+  var W = 200, H2 = 420;
+
+  // App background
+  ctx.fillStyle = '#f5ede0';
+  ctx.fillRect(0, 0, W, H2);
+
+  // Header
+  ctx.fillStyle = '#4a2c1a';
+  ctx.fillRect(0, 0, W, 36);
+  ctx.fillStyle = '#f5ede0';
+  ctx.font = 'bold 11px serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('箱根寄木細工体験', W/2, 23);
+
+  // Palette area
+  var palY = 40;
+  var WOODS = [
+    {name:'ミズキ',    color:'#e8d8bb'},
+    {name:'ホオノキ',  color:'#bfa96e'},
+    {name:'ウルシ',    color:'#c8a800'},
+    {name:'チャンチン',color:'#c85a3a'},
+    {name:'ウォール',  color:'#6a5858'},
+  ];
+  var cellW = 34, gap = 3, totalW = WOODS.length*(cellW+gap)-gap;
+  var startX = (W-totalW)/2;
+
+  // tri row
+  WOODS.forEach(function(w,i){
+    var x = startX + i*(cellW+gap);
+    ctx.fillStyle = 'white'; ctx.strokeStyle = '#c9a96e'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.roundRect(x, palY, cellW, 38, 3); ctx.fill(); ctx.stroke();
+    // triangle shape
+    ctx.fillStyle = w.color;
+    ctx.beginPath();
+    ctx.moveTo(x+cellW/2, palY+5);
+    ctx.lineTo(x+cellW-4, palY+28);
+    ctx.lineTo(x+4, palY+28);
+    ctx.closePath(); ctx.fill();
+  });
+
+  // rh row
+  var palY2 = palY + 44;
+  WOODS.forEach(function(w,i){
+    var x = startX + i*(cellW+gap);
+    ctx.fillStyle = 'white'; ctx.strokeStyle = '#c9a96e'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.roundRect(x, palY2, cellW, 38, 3); ctx.fill(); ctx.stroke();
+    // rhombus shape
+    ctx.fillStyle = w.color;
+    ctx.beginPath();
+    ctx.moveTo(x+8, palY2+12); ctx.lineTo(x+cellW-2, palY2+12);
+    ctx.lineTo(x+cellW-8, palY2+30); ctx.lineTo(x+2, palY2+30);
+    ctx.closePath(); ctx.fill();
+  });
+
+  // Canvas area
+  var cvY = palY2 + 48;
+  var cvH = H2 - cvY - 44;
+
+  // Draw mini yosegi grid
+  var T = 18, Hg = T*Math.sqrt(3)/2;
+  var offX2 = 0, offY2 = cvY;
+
+  ctx.fillStyle = '#e8ebe6';
+  ctx.fillRect(0, cvY, W, cvH);
+
+  // Grid
+  ctx.strokeStyle='rgba(100,120,100,0.2)'; ctx.lineWidth=0.4;
+  for(var r=-1;r<Math.ceil(cvH/Hg)+2;r++){
+    for(var col=-1;col<Math.ceil(W/(T/2))+2;col++){
+      var x0 = offX2 + col*T/2 - T/2;
+      var y0 = offY2 + r*Hg;
+      var up = (col+r)%2===0;
+      var v = up ? [[x0+T/2,y0],[x0+T,y0+Hg],[x0,y0+Hg]]
+                 : [[x0,y0],[x0+T,y0],[x0+T/2,y0+Hg]];
+      ctx.beginPath(); ctx.moveTo(v[0][0],v[0][1]); ctx.lineTo(v[1][0],v[1][1]); ctx.lineTo(v[2][0],v[2][1]); ctx.closePath(); ctx.stroke();
+    }
+  }
+
+  // Pieces - pinwheel pattern
+  var colors2 = ['#e8d8bb','#bfa96e','#c8a800','#c85a3a','#6a5858'];
+  ctx.save();
+  ctx.rect(0, cvY, W, cvH); ctx.clip();
+  for(var r=-1;r<Math.ceil(cvH/Hg)+2;r++){
+    for(var col=-1;col<Math.ceil(W/(T/2))+2;col++){
+      var x0 = offX2 + col*T/2 - T/2;
+      var y0 = offY2 + r*Hg;
+      var up = (col+r)%2===0;
+      var v = up ? [[x0+T/2,y0],[x0+T,y0+Hg],[x0,y0+Hg]]
+                 : [[x0,y0],[x0+T,y0],[x0+T/2,y0+Hg]];
+      var cx2=(v[0][0]+v[1][0]+v[2][0])/3, cy2=(v[0][1]+v[1][1]+v[2][1])/3;
+      var dx=cx2-W/2, dy=cy2-(cvY+cvH/2);
+      var angle=Math.atan2(dy,dx);
+      var seg=((Math.floor((angle+Math.PI)/(Math.PI/3))%6)+6)%6;
+      ctx.fillStyle=colors2[seg%colors2.length];
+      ctx.beginPath(); ctx.moveTo(v[0][0],v[0][1]); ctx.lineTo(v[1][0],v[1][1]); ctx.lineTo(v[2][0],v[2][1]); ctx.closePath(); ctx.fill();
+      ctx.strokeStyle='rgba(255,255,255,0.3)'; ctx.lineWidth=0.4; ctx.stroke();
+    }
+  }
+  ctx.restore();
+
+  // Canvas border overlay buttons suggestion
+  ctx.fillStyle='rgba(255,248,240,0.88)';
+  ctx.strokeStyle='#c9a96e'; ctx.lineWidth=1;
+  // bottom buttons
+  [[8,cvY+cvH-36,32,32],[W-40,cvY+cvH-36,32,32]].forEach(function(b){
+    ctx.beginPath(); ctx.roundRect(b[0],b[1],b[2],b[3],5); ctx.fill(); ctx.stroke();
+  });
+  ctx.fillStyle='#8b5e3c'; ctx.font='16px sans-serif'; ctx.textAlign='center';
+  ctx.fillText('↺', 24, cvY+cvH-14);
+  ctx.fillText('↻', W-24, cvY+cvH-14);
+
+  // Bottom bar
+  ctx.fillStyle='#4a2c1a';
+  ctx.fillRect(0, H2-44, W, 44);
+  ctx.fillStyle='white'; ctx.font='bold 11px serif'; ctx.textAlign='center';
+  ctx.fillText('完成！', W/2-28, H2-16);
+  ctx.fillStyle='rgba(255,255,255,0.5)'; ctx.font='10px serif';
+  ctx.fillText('ピース: 18/40', W/2+30, H2-17);
+})();
+
+// ── Fake QR ───────────────────────────────────────────────────
+(function(){
+  var c = document.getElementById('qrCanvas');
+  var ctx = c.getContext('2d');
+  var S = 70; var modules = 21; var cell = S/modules;
+  ctx.fillStyle='white'; ctx.fillRect(0,0,S,S);
+
+  function sq(x,y,s,col){ ctx.fillStyle=col||'#1a1a1a'; ctx.fillRect(x*cell,y*cell,s*cell,s*cell); }
+  function finder(ox,oy){ sq(ox,oy,7); sq(ox+1,oy+1,5,'white'); sq(ox+2,oy+2,3); }
+  finder(0,0); finder(14,0); finder(0,14);
+
+  var seed=42;
+  function rand(){seed=(seed*1664525+1013904223)&0xffffffff;return(seed>>>0)/4294967296;}
+  for(var r=0;r<modules;r++) for(var col=0;col<modules;col++){
+    if((r<8&&col<8)||(r<8&&col>12)||(r>12&&col<8)) continue;
+    if(rand()>0.5) sq(col,r,1);
+  }
+  for(var i=8;i<13;i++){ if(i%2===0){sq(i,6,1);sq(6,i,1);} }
+})();
+</script>
+</body>
+</html>
