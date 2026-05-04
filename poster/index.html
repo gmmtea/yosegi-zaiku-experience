@@ -62,7 +62,7 @@ body {
 .step-text { font-size: 16px; color: #4a2c1a; line-height: 1.7; padding-top: 2px; }
 
 .qr-row { display: flex; align-items: center; gap: 20px; background: #4a2c1a; border-radius: 8px; padding: 20px 24px; }
-.qr-box { width: 90px; height: 90px; background: white; border-radius: 4px; padding: 5px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.qr-box { width: 90px; height: 90px; background: white; border-radius: 4px; padding: 3px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
 .qr-label { font-size: 12px; color: #c9a96e; letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 6px; }
 .qr-main { font-family: 'Shippori Mincho', serif; font-size: 19px; color: #f5ede0; line-height: 1.5; margin-bottom: 6px; }
 .qr-url { font-size: 10px; color: rgba(201,169,110,0.7); font-family: monospace; white-space: nowrap; }
@@ -70,14 +70,14 @@ body {
 .right-col { flex-shrink: 0; }
 
 .phone {
-  width: 228px; background: #1a1a1a; border-radius: 36px; padding: 14px;
+  width: 220px; background: #1a1a1a; border-radius: 36px; padding: 10px 8px;
   box-shadow: 0 0 0 2px #333, 0 20px 60px rgba(0,0,0,0.5), inset 0 0 0 1px #444;
   display: flex; flex-direction: column; align-items: center;
 }
-.phone-notch { width: 80px; height: 22px; background: #1a1a1a; border-radius: 0 0 14px 14px; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; }
-.notch-cam { width: 8px; height: 8px; background: #2a2a2a; border-radius: 50%; border: 1px solid #333; }
-.phone-screen { border-radius: 24px; overflow: hidden; background: #e8ebe6; width: 200px; }
-.phone-home { width: 60px; height: 4px; background: #444; border-radius: 2px; margin: 10px auto 0; }
+.phone-notch { width: 70px; height: 18px; background: #1a1a1a; border-radius: 0 0 12px 12px; margin-bottom: 6px; display: flex; align-items: center; justify-content: center; }
+.notch-cam { width: 7px; height: 7px; background: #2a2a2a; border-radius: 50%; border: 1px solid #333; }
+.phone-screen { border-radius: 20px; overflow: hidden; background: #e8ebe6; width: 204px; }
+.phone-home { width: 60px; height: 4px; background: #444; border-radius: 2px; margin: 8px auto 0; }
 
 .poster-footer {
   position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
@@ -137,7 +137,7 @@ body {
       <div class="qr-row">
         <div class="qr-box">
           <!-- ▼▼▼ QRコード画像をここに差し替え ▼▼▼ -->
-          <img src="qr.png" alt="QR" style="width:80px;height:80px;object-fit:contain;display:block;"/>
+          <img src="qr.png" alt="QR" style="width:84px;height:84px;object-fit:contain;display:block;"/>
           <!-- ▲▲▲ QRコード画像をここに差し替え ▲▲▲ -->
         </div>
         <div class="qr-text">
@@ -156,7 +156,7 @@ body {
         <div class="phone-screen">
           <!-- ▼▼▼ スマホのスクリーンショット（1080×2093）をここに差し替え ▼▼▼ -->
           <img src="image.png" alt="app screen"
-               style="width:200px;height:388px;object-fit:cover;object-position:top;display:block;"/>
+               style="width:204px;height:396px;object-fit:cover;object-position:top;display:block;"/>
           <!-- ▲▲▲ スマホのスクリーンショットをここに差し替え ▲▲▲ -->
         </div>
         <div class="phone-home"></div>
