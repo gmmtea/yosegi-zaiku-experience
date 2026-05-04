@@ -11,7 +11,7 @@
 body{background:var(--paper);color:var(--wdp);font-family:'Noto Serif JP',serif;min-height:100vh;user-select:none;}
 
 header{text-align:center;padding:14px 20px 10px;border-bottom:2px solid var(--wm);}
-h1{font-family:'Shippori Mincho',serif;font-size:clamp(28px,7vw,52px);letter-spacing:.15em;}
+h1{font-family:'Shippori Mincho',serif;font-size:clamp(28px,7vw,52px);letter-spacing:.15em;line-height:1.1;}
 
 .wrap{max-width:600px;margin:0 auto;padding:12px 10px 28px;}
 
@@ -130,19 +130,26 @@ canvas{display:block;touch-action:none;width:100% !important;height:auto !import
 </style>
 </head>
 <body>
+<nav style="background:#4a2c1a;padding:8px 16px;display:flex;justify-content:space-between;align-items:center;">
+  <a id="navShopName" href="https://www.kanazashi-woodcraft.com" target="_blank" style="font-family:'Shippori Mincho',serif;font-size:14px;color:#c9a96e;letter-spacing:0.2em;text-decoration:none;">金指ウッドクラフト</a>
+  <div style="display:flex;gap:4px;">
+    <button id="btnLangJP" style="padding:4px 12px;border:1.5px solid #c9a96e;background:transparent;color:#c9a96e;font-family:'Noto Serif JP',serif;font-size:13px;border-radius:3px;cursor:pointer;letter-spacing:0.05em;">JP</button>
+    <button id="btnLangEN" style="padding:4px 12px;border:1.5px solid transparent;background:transparent;color:rgba(201,169,110,0.4);font-family:'Noto Serif JP',serif;font-size:13px;border-radius:3px;cursor:pointer;letter-spacing:0.05em;">EN</button>
+  </div>
+</nav>
 <header>
   <h1>箱根寄木細工体験</h1>
-  <p style="font-size:16px;color:var(--wd);margin-top:6px;opacity:.8;"><a href="https://www.kanazashi-woodcraft.com/information.html" target="_blank" style="color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);">箱根寄木細工のコースター作り</a>に向けて、デザインを考えてみましょう。</p>
+  <p id="headerDesc" style="font-size:16px;color:var(--wd);margin-top:6px;opacity:.8;"><a href="https://www.kanazashi-woodcraft.com/information.html" target="_blank" style="color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);">箱根寄木細工のコースター作り</a>に向けて、デザインを考えてみましょう。</p>
 </header>
 
 <div class="wrap">
-  <!-- Wood name header: offset by eraser width -->
+  <!-- Wood name header -->
   <div style="display:flex;gap:6px;margin-bottom:5px;align-items:flex-end;">
     <div style="display:flex;gap:6px;flex:1;align-items:flex-end;" id="woodNames"></div>
     <div style="width:60px;flex-shrink:0;"></div>
   </div>
 
-  <!-- Palette: tri/rhombus rows + eraser -->
+  <!-- Palette -->
   <div class="palette-area">
     <div class="palette-rows">
       <div class="palette-grid" id="palTri"></div>
@@ -154,48 +161,43 @@ canvas{display:block;touch-action:none;width:100% !important;height:auto !import
     </button>
   </div>
 
-  <!-- Canvas: full width, rot + zoom buttons overlaid -->
+  <!-- Canvas -->
   <div class="canvas-wrap">
     <div class="cbox"><canvas id="c"></canvas></div>
     <button class="rot-btn" id="rotL">↺</button>
     <button class="rot-btn" id="rotR">↻</button>
     <button class="zoom-btn" id="zoomOut" style="left:10px;">－</button>
     <button class="zoom-btn" id="zoomIn"  style="right:10px;">＋</button>
-    <!-- Move buttons at edges -->
     <button class="move-btn" id="moveUp"    style="top:10px;left:50%;transform:translateX(-50%);">↑</button>
     <button class="move-btn" id="moveDown"  style="bottom:10px;left:50%;transform:translateX(-50%);">↓</button>
     <button class="move-btn" id="moveLeft"  style="left:10px;top:50%;transform:translateY(-50%);">←</button>
     <button class="move-btn" id="moveRight" style="right:10px;top:50%;transform:translateY(-50%);">→</button>
   </div>
 
-  <!-- Stats -->
   <div class="stats-row">
-    <span class="piece-count">ピース: <strong id="cnt">0</strong> / 40</span>
+    <span class="piece-count"><span id="piecesLabel">ピース:</span> <strong id="cnt">0</strong> / 40</span>
     <div class="pb-wrap"><div class="pf" id="pf" style="width:0%"></div></div>
   </div>
 
-  <!-- Bottom bar -->
   <div class="bottom-bar">
     <button class="btn btn-s" id="btnUndo">↩ 一つ戻す</button>
     <button class="btn btn-s" id="btnClear">✕ 全消去</button>
     <button class="btn btn-p" id="btnDone">完成！</button>
   </div>
 
-  <!-- Footer -->
   <footer style="text-align:center;margin-top:20px;padding-bottom:8px;">
-    <a href="https://www.kanazashi-woodcraft.com/information.html" target="_blank"
+    <a id="footerLink" href="https://www.kanazashi-woodcraft.com/information.html" target="_blank"
        style="font-size:16px;color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);padding-bottom:2px;">
       金指ウッドクラフトで寄木体験を予約する →
     </a>
   </footer>
 </div>
 
-<!-- Confirm clear modal -->
 <canvas id="confettiCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:300;display:none;"></canvas>
 <div class="ov" id="ovConfirm">
   <div class="mc">
-    <div class="mct">全消去しますか？</div>
-    <div class="mcs">置いたピースがすべて消えます。</div>
+    <div class="mct" id="confirmTitle">全消去しますか？</div>
+    <div class="mcs" id="confirmDesc">置いたピースがすべて消えます。</div>
     <button class="btn btn-p" id="btnConfirmYes" style="margin-bottom:10px;width:100%">消去する</button><br>
     <button class="btn btn-s" id="btnConfirmNo" style="width:100%">キャンセル</button>
   </div>
@@ -203,14 +205,14 @@ canvas{display:block;touch-action:none;width:100% !important;height:auto !import
 
 <div class="ov" id="ov">
   <div class="mc">
-    <div class="mct">完成！</div>
-    <div class="mcs">このデザインを<a href="https://www.kanazashi-woodcraft.com/information.html" target="_blank" style="color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);">寄木体験</a>で形にしましょう。</div>
+    <div class="mct" id="modalTitle">完成！</div>
+    <div class="mcs" id="modalDesc">このデザインを<a href="https://www.kanazashi-woodcraft.com/information.html" target="_blank" style="color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);">寄木体験</a>で形にしましょう。</div>
     <canvas id="thumb" style="max-width:100%;border:2px solid var(--wm);margin-bottom:14px;display:block;margin-left:auto;margin-right:auto;"></canvas>
     <div style="display:flex;gap:8px;margin-bottom:14px;">
       <button class="btn btn-p" id="btnDl" style="flex:1">画像を保存</button>
       <button class="btn btn-s" id="btnClose" style="flex:1">続けて作る</button>
     </div>
-    <a href="https://www.kanazashi-woodcraft.com/information.html" target="_blank"
+    <a id="modalFooterLink" href="https://www.kanazashi-woodcraft.com/information.html" target="_blank"
        style="font-size:16px;color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);padding-bottom:2px;">
       金指ウッドクラフトで寄木体験を予約する →
     </a>
@@ -221,12 +223,82 @@ canvas{display:block;touch-action:none;width:100% !important;height:auto !import
 (function(){
 
 var WOODS=[
-  {jp:'ミズキ',         color:'#e8d8bb'},
-  {jp:'ホオノキ',       color:'#bfa96e'},
-  {jp:'ウルシ',         color:'#c8a800'},
-  {jp:'チャン\nチン',   color:'#c85a3a'},
-  {jp:'ウォール\nナット',color:'#6a5858'},
+  {jp:'ミズキ',          en:'Dogwood',      color:'#e8d8bb'},
+  {jp:'ホオノキ',        en:'Magnolia',     color:'#bfa96e'},
+  {jp:'ウルシ',          en:'Lacquer',      color:'#c8a800'},
+  {jp:'チャン\nチン',    en:'Chinese\nToon',color:'#c85a3a'},
+  {jp:'ウォール\nナット', en:'Walnut',      color:'#6a5858'},
 ];
+
+// ── Language ───────────────────────────────────────────────────
+var lang = 'jp';
+var TEXTS = {
+  jp: {
+    title:       '箱根寄木細工体験<br><span style="font-size:0.7em;letter-spacing:0.1em;display:inline-block;margin-bottom:4px;">デザインシミュレーター</span>',
+    desc:        '<a href="https://www.kanazashi-woodcraft.com/information.html" target="_blank" style="color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);">箱根寄木細工のコースター作り</a>に向けて、デザインを考えてみましょう。',
+    eraser:      '消去',
+    pieces:      'ピース:',
+    undo:        '↩ 一つ戻す',
+    clear:       '✕ 全消去',
+    done:        '完成！',
+    footer:      '金指ウッドクラフトで寄木体験を予約する →',
+    confirmTitle:'全消去しますか？',
+    confirmDesc: '置いたピースがすべて消えます。',
+    confirmYes:  '消去する',
+    confirmNo:   'キャンセル',
+    modalTitle:  '完成！',
+    modalDesc:   'このデザインを<a href="https://www.kanazashi-woodcraft.com/information.html" target="_blank" style="color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);">寄木体験</a>で形にしましょう。',
+    save:        '画像を保存',
+    keepEditing: '続けて作る',
+    modalFooter: '金指ウッドクラフトで寄木体験を予約する →',
+    shopName:    '金指ウッドクラフト',
+  },
+  en: {
+    title:       'Yosegi-zaiku<br><span style="font-size:0.7em;letter-spacing:0.1em;display:inline-block;margin-bottom:4px;">Design Simulator</span>',
+    desc:        'Design your coaster for the <a href="https://www.kanazashi-woodcraft.com/information.html" target="_blank" style="color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);">Hakone Yosegi-zaiku experience</a>.',
+    eraser:      'Erase',
+    pieces:      'Pieces:',
+    undo:        '↩ Undo',
+    clear:       '✕ Clear',
+    done:        'Done!',
+    footer:      'Book a Yosegi-zaiku experience at Kanazashi Woodcraft →',
+    confirmTitle:'Clear all?',
+    confirmDesc: 'All placed pieces will be removed.',
+    confirmYes:  'Clear',
+    confirmNo:   'Cancel',
+    modalTitle:  'Done!',
+    modalDesc:   'Bring this design to the <a href="https://www.kanazashi-woodcraft.com/information.html" target="_blank" style="color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);">Yosegi-zaiku experience</a>.',
+    save:        'Save Image',
+    keepEditing: 'Keep Editing',
+    modalFooter: 'Book a Yosegi-zaiku experience at Kanazashi Woodcraft →',
+    shopName:    'Kanazashi Woodcraft',
+  }
+};
+
+function applyLang(){
+  var t=TEXTS[lang];
+  document.querySelector('h1').innerHTML=t.title;
+  document.getElementById('headerDesc').innerHTML=t.desc;
+  document.querySelector('.eraser-lbl').textContent=t.eraser;
+  document.getElementById('piecesLabel').textContent=t.pieces;
+  document.getElementById('btnUndo').textContent=t.undo;
+  document.getElementById('btnClear').innerHTML=t.clear;
+  document.getElementById('btnDone').textContent=t.done;
+  document.getElementById('footerLink').textContent=t.footer;
+  document.getElementById('confirmTitle').textContent=t.confirmTitle;
+  document.getElementById('confirmDesc').textContent=t.confirmDesc;
+  document.getElementById('btnConfirmYes').textContent=t.confirmYes;
+  document.getElementById('btnConfirmNo').textContent=t.confirmNo;
+  document.getElementById('modalTitle').textContent=t.modalTitle;
+  document.getElementById('modalDesc').innerHTML=t.modalDesc;
+  document.getElementById('btnDl').textContent=t.save;
+  document.getElementById('btnClose').textContent=t.keepEditing;
+  document.getElementById('modalFooterLink').textContent=t.modalFooter;
+  document.getElementById('navShopName').textContent=t.shopName;
+  document.querySelectorAll('.wood-name').forEach(function(el,i){
+    el.textContent=WOODS[i][lang];
+  });
+}
 
 var globalRotSteps = 1; // 30° default: vertical lines
 var pieces  = [];
@@ -383,7 +455,8 @@ var woodNamesEl=document.getElementById('woodNames');
 WOODS.forEach(function(w){
   var el=document.createElement('div');
   el.style.cssText='flex:1;font-size:clamp(13px,3vw,19px);color:#8b5e3c;text-align:center;white-space:pre;line-height:1.4;display:flex;align-items:flex-end;justify-content:center;';
-  el.textContent=w.jp;
+  el.className='wood-name';
+  el.textContent=w[lang];
   woodNamesEl.appendChild(el);
 });
 
@@ -895,6 +968,17 @@ document.getElementById('btnDl').addEventListener('click',function(){
 });
 document.getElementById('ov').addEventListener('click',function(e){if(e.target===this) this.classList.remove('show');});
 
+// ── Language toggle ────────────────────────────────────────────
+function updateLangButtons(){
+  document.getElementById('btnLangJP').style.borderColor = lang==='jp' ? '#c9a96e' : 'transparent';
+  document.getElementById('btnLangJP').style.color       = lang==='jp' ? '#c9a96e' : 'rgba(201,169,110,0.4)';
+  document.getElementById('btnLangEN').style.borderColor = lang==='en' ? '#c9a96e' : 'transparent';
+  document.getElementById('btnLangEN').style.color       = lang==='en' ? '#c9a96e' : 'rgba(201,169,110,0.4)';
+}
+document.getElementById('btnLangJP').addEventListener('click',function(){ lang='jp'; applyLang(); updateLangButtons(); });
+document.getElementById('btnLangEN').addEventListener('click',function(){ lang='en'; applyLang(); updateLangButtons(); });
+applyLang();
+updateLangButtons();
 render();
 })();
 </script>
