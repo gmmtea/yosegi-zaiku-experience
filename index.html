@@ -207,7 +207,7 @@ canvas{display:block;touch-action:none;width:100% !important;height:auto !import
     <div class="mcs">このデザインを<a href="https://www.kanazashi-woodcraft.com/information.html" target="_blank" style="color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);">寄木体験</a>で形にしましょう。</div>
     <canvas id="thumb" style="max-width:100%;border:2px solid var(--wm);margin-bottom:14px;display:block;margin-left:auto;margin-right:auto;"></canvas>
     <div style="display:flex;gap:8px;margin-bottom:14px;">
-      <button class="btn btn-p" id="btnDl" style="flex:1">画像を共有</button>
+      <button class="btn btn-p" id="btnDl" style="flex:1">画像を保存</button>
       <button class="btn btn-s" id="btnClose" style="flex:1">続けて作る</button>
     </div>
     <a href="https://www.kanazashi-woodcraft.com/information.html" target="_blank"
@@ -890,28 +890,8 @@ document.getElementById('btnClose').addEventListener('click',function(){
   confettiGen++; // stop confetti
   confettiCanvas.style.display='none';
 });
-document.getElementById('btnDl').addEventListener('click',async function(){
-  var dataUrl=canvas.toDataURL('image/png');
-
-  // Web Share API対応ブラウザ（主にスマホ）
-  if(navigator.share && navigator.canShare){
-    try {
-      var blob=await(await fetch(dataUrl)).blob();
-      var file=new File([blob],'yosegi.png',{type:'image/png'});
-      if(navigator.canShare({files:[file]})){
-        await navigator.share({
-          title:'箱根寄木細工 デザイン',
-          text:'寄木細工のコースターデザインを作りました！',
-          files:[file]
-        });
-        return;
-      }
-    } catch(e){
-      if(e.name==='AbortError') return; // ユーザーがキャンセル
-    }
-  }
-  // フォールバック: 画像を保存
-  var a=document.createElement('a');a.download='yosegi.png';a.href=dataUrl;a.click();
+document.getElementById('btnDl').addEventListener('click',function(){
+  var a=document.createElement('a');a.download='yosegi.png';a.href=canvas.toDataURL();a.click();
 });
 document.getElementById('ov').addEventListener('click',function(e){if(e.target===this) this.classList.remove('show');});
 
