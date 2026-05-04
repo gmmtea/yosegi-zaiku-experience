@@ -16,182 +16,81 @@ body {
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-  padding: 0;
-  margin: 0;
+  padding: 0; margin: 0;
   min-height: 100vh;
 }
 
 /* A4 at 96dpi = 794×1123px */
 .poster {
-  width: 794px;
-  height: 1123px;
+  width: 794px; height: 1123px;
   background: #f5ede0;
-  position: relative;
-  overflow: hidden;
+  position: relative; overflow: hidden;
   font-family: 'Noto Serif JP', serif;
   flex-shrink: 0;
 }
 
-/* === GEO BACKGROUND === */
 .geo-bg {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  z-index: 0;
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 100%; z-index: 0;
 }
 
-/* === HEADER === */
 .header-band {
   position: relative; z-index: 2;
-  background: #4a2c1a;
-  padding: 20px 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  background: #4a2c1a; padding: 20px 40px;
+  display: flex; justify-content: space-between; align-items: center;
 }
-.shop-name-header {
-  font-family: 'Shippori Mincho', serif;
-  font-size: 20px; color: #c9a96e; letter-spacing: 0.3em;
-}
-.tagline-header {
-  font-size: 13px; color: rgba(201,169,110,0.7); letter-spacing: 0.15em;
-}
+.shop-name-header { font-family: 'Shippori Mincho', serif; font-size: 20px; color: #c9a96e; letter-spacing: 0.3em; }
+.tagline-header { font-size: 13px; color: rgba(201,169,110,0.7); letter-spacing: 0.15em; }
 
-/* === BODY LAYOUT: text left, phone right === */
 .body-layout {
   position: relative; z-index: 2;
-  display: flex;
-  align-items: center;
-  padding: 50px 48px 40px;
-  gap: 40px;
+  display: flex; align-items: center;
+  padding: 50px 48px 40px; gap: 40px;
 }
 
-/* Left column */
 .left-col { flex: 1; }
 
-.eyebrow {
-  font-size: 15px; letter-spacing: 0.4em; color: #8b5e3c;
-  text-transform: uppercase; margin-bottom: 14px;
-}
-.main-title {
-  font-family: 'Shippori Mincho', serif;
-  font-size: 72px; font-weight: 800;
-  color: #4a2c1a; line-height: 1.1;
-  letter-spacing: 0.06em; margin-bottom: 8px;
-}
-.sub-title {
-  font-family: 'Shippori Mincho', serif;
-  font-size: 26px; color: #8b5e3c;
-  letter-spacing: 0.2em; margin-bottom: 28px;
-}
-.desc-text {
-  font-size: 17px; color: #4a2c1a;
-  line-height: 2.0; margin-bottom: 32px;
-}
+.eyebrow { font-size: 15px; letter-spacing: 0.4em; color: #8b5e3c; text-transform: uppercase; margin-bottom: 14px; }
+.main-title { font-family: 'Shippori Mincho', serif; font-size: 72px; font-weight: 800; color: #4a2c1a; line-height: 1.1; letter-spacing: 0.06em; margin-bottom: 8px; }
+.sub-title { font-family: 'Shippori Mincho', serif; font-size: 26px; color: #8b5e3c; letter-spacing: 0.2em; margin-bottom: 28px; }
+.desc-text { font-size: 17px; color: #4a2c1a; line-height: 2.0; margin-bottom: 32px; }
 
-/* Steps */
 .steps { margin-bottom: 36px; }
-.steps-label {
-  font-size: 13px; letter-spacing: 0.35em; color: #8b5e3c;
-  text-transform: uppercase; margin-bottom: 12px;
-  padding-bottom: 6px; border-bottom: 1px solid #c9a96e;
-}
-.step-row {
-  display: flex; align-items: flex-start;
-  gap: 12px; margin-bottom: 12px;
-}
-.step-num {
-  width: 26px; height: 26px; background: #4a2c1a;
-  color: #f5ede0; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 13px; font-family: 'Shippori Mincho', serif; flex-shrink: 0;
-}
+.steps-label { font-size: 13px; letter-spacing: 0.35em; color: #8b5e3c; text-transform: uppercase; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid #c9a96e; }
+.step-row { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+.step-num { width: 26px; height: 26px; background: #4a2c1a; color: #f5ede0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-family: 'Shippori Mincho', serif; flex-shrink: 0; }
 .step-text { font-size: 16px; color: #4a2c1a; line-height: 1.7; padding-top: 2px; }
 
-/* QR section */
-.qr-row {
-  display: flex; align-items: center; gap: 20px;
-  background: #4a2c1a; border-radius: 8px;
-  padding: 20px 24px;
-}
-.qr-box {
-  width: 90px; height: 90px; background: white;
-  border-radius: 4px; padding: 5px; flex-shrink: 0;
-}
-canvas#qrCanvas { width: 80px; height: 80px; image-rendering: pixelated; }
-.qr-text {}
+.qr-row { display: flex; align-items: center; gap: 20px; background: #4a2c1a; border-radius: 8px; padding: 20px 24px; }
+.qr-box { width: 90px; height: 90px; background: white; border-radius: 4px; padding: 5px; flex-shrink: 0; }
 .qr-label { font-size: 12px; color: #c9a96e; letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 6px; }
 .qr-main { font-family: 'Shippori Mincho', serif; font-size: 19px; color: #f5ede0; line-height: 1.5; margin-bottom: 6px; }
 .qr-url { font-size: 12px; color: rgba(201,169,110,0.7); font-family: monospace; }
 
-/* Right column: smartphone mockup */
 .right-col { flex-shrink: 0; }
 
 .phone {
-  width: 220px;
-  background: #1a1a1a;
-  border-radius: 36px;
-  padding: 14px 10px;
-  box-shadow:
-    0 0 0 2px #333,
-    0 20px 60px rgba(0,0,0,0.5),
-    inset 0 0 0 1px #444;
-  position: relative;
+  width: 220px; background: #1a1a1a; border-radius: 36px; padding: 14px 10px;
+  box-shadow: 0 0 0 2px #333, 0 20px 60px rgba(0,0,0,0.5), inset 0 0 0 1px #444;
 }
-.phone-notch {
-  width: 80px; height: 22px;
-  background: #1a1a1a;
-  border-radius: 0 0 14px 14px;
-  margin: 0 auto 8px;
-  position: relative; z-index: 2;
-  display: flex; align-items: center; justify-content: center;
-  gap: 6px;
-}
-.notch-cam {
-  width: 8px; height: 8px;
-  background: #2a2a2a; border-radius: 50%;
-  border: 1px solid #333;
-}
-.phone-screen {
-  border-radius: 24px;
-  overflow: hidden;
-  background: #e8ebe6;
-}
-canvas#phoneCanvas {
-  display: block;
-  width: 200px;
-  height: 420px;
-}
-.phone-home {
-  width: 60px; height: 4px;
-  background: #444; border-radius: 2px;
-  margin: 10px auto 0;
-}
+.phone-notch { width: 80px; height: 22px; background: #1a1a1a; border-radius: 0 0 14px 14px; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; }
+.notch-cam { width: 8px; height: 8px; background: #2a2a2a; border-radius: 50%; border: 1px solid #333; }
+.phone-screen { border-radius: 24px; overflow: hidden; background: #e8ebe6; }
+.phone-home { width: 60px; height: 4px; background: #444; border-radius: 2px; margin: 10px auto 0; }
 
-/* === FOOTER === */
 .poster-footer {
-  position: absolute; bottom: 0; left: 0; right: 0;
-  z-index: 2;
-  background: #e8d5b7;
-  padding: 14px 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
+  background: #e8d5b7; padding: 14px 40px;
+  display: flex; justify-content: space-between; align-items: center;
   border-top: 2px solid #c9a96e;
 }
-.footer-shop {
-  font-family: 'Shippori Mincho', serif;
-  font-size: 20px; font-weight: 700; color: #4a2c1a; letter-spacing: 0.1em;
-}
-.footer-info {
-  font-size: 13px; color: #8b5e3c; text-align: right; line-height: 1.7;
-}
+.footer-shop { font-family: 'Shippori Mincho', serif; font-size: 20px; font-weight: 700; color: #4a2c1a; letter-spacing: 0.1em; }
+.footer-info { font-size: 13px; color: #8b5e3c; }
 </style>
 </head>
 <body>
 <div class="poster">
 
-  <!-- Geo background -->
   <svg class="geo-bg" viewBox="0 0 794 1123" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <pattern id="tp" x="0" y="0" width="52" height="45" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
@@ -210,15 +109,12 @@ canvas#phoneCanvas {
     <polygon points="0,1123 0,883 240,1123" fill="rgba(201,169,110,0.07)"/>
   </svg>
 
-  <!-- Header -->
   <div class="header-band">
     <div class="shop-name-header">金指ウッドクラフト</div>
     <div class="tagline-header">KANAZASHI WOODCRAFT · 箱根畑宿</div>
   </div>
 
-  <!-- Body -->
   <div class="body-layout">
-    <!-- Left -->
     <div class="left-col">
       <div class="eyebrow">体験前の準備に</div>
       <div class="main-title">箱根<br>寄木細工</div>
@@ -240,8 +136,7 @@ canvas#phoneCanvas {
       <div class="qr-row">
         <div class="qr-box">
           <!-- ▼▼▼ QRコード画像をここに差し替え ▼▼▼ -->
-          <img id="qrImg" src="qr.png" alt="QR" width="80" height="80"
-               style="width:80px;height:80px;object-fit:contain;display:block;"/>
+          <img src="qr.png" alt="QR" style="width:80px;height:80px;object-fit:contain;display:block;"/>
           <!-- ▲▲▲ QRコード画像をここに差し替え ▲▲▲ -->
         </div>
         <div class="qr-text">
@@ -254,35 +149,25 @@ canvas#phoneCanvas {
       </div>
     </div>
 
-    <!-- Right: phone -->
     <div class="right-col">
       <div class="phone">
-        <div class="phone-notch">
-          <div class="notch-cam"></div>
-        </div>
+        <div class="phone-notch"><div class="notch-cam"></div></div>
         <div class="phone-screen">
-          <!-- ▼▼▼ スマホ画面のスクリーンショットをここに差し替え（200×420px推奨） ▼▼▼ -->
-          <img id="phoneImg" src="image.png" alt="app screen" width="200" height="388"
-               style="width:200px;height:420px;object-fit:cover;display:block;"/>
-          <!-- ▲▲▲ スマホ画面のスクリーンショットをここに差し替え ▲▲▲ -->
+          <!-- ▼▼▼ スマホのスクリーンショット（1080×2093）をここに差し替え ▼▼▼ -->
+          <img src="image.png" alt="app screen"
+               style="width:200px;height:388px;object-fit:cover;object-position:top;display:block;"/>
+          <!-- ▲▲▲ スマホのスクリーンショットをここに差し替え ▲▲▲ -->
         </div>
         <div class="phone-home"></div>
       </div>
     </div>
   </div>
 
-  <!-- Footer -->
   <div class="poster-footer">
     <div class="footer-shop">金指ウッドクラフト</div>
-    <div class="footer-info">
-      神奈川県足柄下郡箱根町畑宿103　　kanazashi-woodcraft.com
-    </div>
+    <div class="footer-info">神奈川県足柄下郡箱根町畑宿103　　kanazashi-woodcraft.com</div>
   </div>
 
 </div>
-
-
-</body>
-</html>
 </body>
 </html>
