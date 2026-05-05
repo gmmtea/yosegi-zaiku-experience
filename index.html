@@ -136,6 +136,7 @@ canvas{display:block;touch-action:none;width:100% !important;height:auto !import
 
 /* Modal */
 .ov{display:none;position:fixed;inset:0;background:rgba(74,44,26,.85);z-index:200;align-items:center;justify-content:center;}
+#toast{position:absolute;top:20px;left:50%;transform:translateX(-50%);background:rgba(74,44,26,0.92);color:#f5ede0;font-family:'Noto Serif JP',serif;font-size:15px;padding:10px 20px;border-radius:24px;white-space:nowrap;pointer-events:none;z-index:400;opacity:0;transition:opacity 0.3s;}
 .ov.show{display:flex;}
 .mc{background:var(--paper);padding:28px;text-align:center;max-width:440px;width:90%;border-radius:4px;box-shadow:0 20px 60px rgba(0,0,0,.4);}
 .mct{font-family:'Shippori Mincho',serif;font-size:30px;margin-bottom:6px;}
@@ -179,6 +180,7 @@ canvas{display:block;touch-action:none;width:100% !important;height:auto !import
   <!-- Canvas -->
   <div class="canvas-wrap">
     <div class="cbox"><canvas id="c"></canvas></div>
+    <div id="toast"></div>
     <button class="rot-btn" id="rotL">↺</button>
     <button class="rot-btn" id="rotR">↻</button>
     <button class="zoom-btn" id="zoomOut" style="left:10px;">－</button>
@@ -267,6 +269,7 @@ var TEXTS = {
     keepEditing: '続けて作る',
     modalFooter: '金指ウッドクラフトで寄木体験を予約する →',
     shopName:    '金指ウッドクラフト',
+    toast:       '↑ 木材を選んでください',
   },
   en: {
     title:       'Yosegi-zaiku<br><span style="font-size:0.7em;letter-spacing:0.1em;display:block;margin-bottom:4px;">Design Simulator</span>',
@@ -287,6 +290,7 @@ var TEXTS = {
     keepEditing: 'Keep Editing',
     modalFooter: 'Book a Yosegi-zaiku experience at Kanazashi Woodcraft →',
     shopName:    'Kanazashi Woodcraft',
+    toast:       '↑ Select a wood above',
   }
 };
 
@@ -541,12 +545,21 @@ canvas.addEventListener('touchmove',function(e){
 },{passive:false});
 
 // Click / tap to place or erase
+var toastTimer=null;
+function showToast(){
+  var el=document.getElementById('toast');
+  el.textContent=TEXTS[lang].toast;
+  el.style.opacity='1';
+  if(toastTimer) clearTimeout(toastTimer);
+  toastTimer=setTimeout(function(){ el.style.opacity='0'; },2000);
+}
+
 canvas.addEventListener('click',function(e){
   var p=canvasPos(e),cell=hitTest(p.x,p.y);if(!cell) return;
   if(eraserMode){
     removePieceAt(cell.col,cell.row);return;
   }
-  if(!selShape) return;
+  if(!selShape){ showToast(); return; }
   if(selShape==='rhombus') hoverDir=bestRhDir(cell.col,cell.row,p.x,p.y);
   doPlace(cell.col,cell.row);startAnim();
 });
