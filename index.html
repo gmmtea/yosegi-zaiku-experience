@@ -551,7 +551,7 @@ function showToast(){
   el.textContent=TEXTS[lang].toast;
   el.style.opacity='1';
   if(toastTimer) clearTimeout(toastTimer);
-  toastTimer=setTimeout(function(){ el.style.opacity='0'; },2000);
+  toastTimer=setTimeout(function(){ el.style.opacity='0'; },1200);
 }
 
 canvas.addEventListener('click',function(e){
