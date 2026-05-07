@@ -1037,7 +1037,18 @@ document.getElementById('btnDone').addEventListener('click',function(){
   var thumb=document.getElementById('thumb');
   thumb.width=CW; thumb.height=CH;
   thumb.style.width='100%'; thumb.style.height='auto';
-  thumb.getContext('2d').drawImage(canvas,0,0,CW,CH,0,0,CW,CH);
+  var tctx=thumb.getContext('2d');
+  tctx.drawImage(canvas,0,0,CW,CH,0,0,CW,CH);
+  var logo=new Image();
+  logo.onload=function(){
+    var lw=120, lh=lw*(logo.naturalHeight/logo.naturalWidth);
+    var margin=12;
+    tctx.globalAlpha=0.7;
+    tctx.drawImage(logo, CW-lw-margin, CH-lh-margin, lw, lh);
+    tctx.globalAlpha=1.0;
+  };
+  logo.onerror=function(){};
+  logo.src='logo.png';
   launchConfetti();
 });
 document.getElementById('btnClose').addEventListener('click',function(){
@@ -1046,7 +1057,7 @@ document.getElementById('btnClose').addEventListener('click',function(){
   confettiCanvas.style.display='none';
 });
 document.getElementById('btnDl').addEventListener('click',function(){
-  var a=document.createElement('a');a.download='yosegi.png';a.href=canvas.toDataURL();a.click();
+  var a=document.createElement('a');a.download='yosegi.png';a.href=document.getElementById('thumb').toDataURL();a.click();
 });
 document.getElementById('btnX').addEventListener('click',function(){
   var url=getShareUrl();
