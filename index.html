@@ -367,6 +367,7 @@ var eraserMode=false;
 var warnCells={}, WARN_MS=600;
 var fadingPieces=[];
 var FADE_MS=100;
+var FADE_IN_MS=200;
 
 // ── Grid ──────────────────────────────────────────────────────
 var T    = 104;
@@ -628,7 +629,8 @@ function removePieceAt(col,row){
 function fadeLoop(){
   var now=Date.now();
   fadingPieces=fadingPieces.filter(function(fp){
-    var done = now-fp.removedAt >= FADE_MS;
+    var ms = fp.fadeIn ? FADE_IN_MS : FADE_MS;
+    var done = now-fp.removedAt >= ms;
     if(done && fp.fadeIn && fp.piece){
       // fadeIn complete: now add to pieces for real
       pieces.push(fp.piece);
@@ -792,16 +794,29 @@ function renderWithAnim(){
 
     if(!fp.clearAnim){
       // Normal fade in/out
-      var t=elapsed/FADE_MS;
-      var alpha=fp.fadeIn ? Math.min(t,1)*0.9 : (1-Math.min(t,1))*0.9;
+      var ms = fp.fadeIn ? FADE_IN_MS : FADE_MS;
+      var t=Math.min(elapsed/ms, 1);
+      var alpha=fp.fadeIn ? t*0.9 : (1-t)*0.9;
       if(alpha<=0) return;
+      ctx.save();
       ctx.globalAlpha=alpha;
+      if(fp.scaleIn){
+        // scale from 1.4 down to 1.0, ease-out
+        var scale = 1.4 - 0.4*t;
+        // find center of piece
+        var allV=fp.keys.reduce(function(acc,k){
+          var p=k.split(','); return acc.concat(getVerts(+p[0],+p[1]));
+        },[]);
+        var cx=allV.reduce(function(s,v){return s+v.x;},0)/allV.length;
+        var cy=allV.reduce(function(s,v){return s+v.y;},0)/allV.length;
+        ctx.translate(cx,cy); ctx.scale(scale,scale); ctx.translate(-cx,-cy);
+      }
       fp.keys.forEach(function(key){
         var p=key.split(','); fillTri(ctx,getVerts(+p[0],+p[1]),fp.color);
       });
       var cells=fp.keys.map(function(k){var p=k.split(',');return{col:+p[0],row:+p[1]};});
       drawPieceBorder(ctx,cells);
-      ctx.globalAlpha=1;
+      ctx.restore();
       return;
     }
 
@@ -1362,14 +1377,29 @@ function loadFromUrl(){
   }
   if(!d) return;
   var loaded=decodePieces(d);
-  loaded.forEach(function(piece){
-    var blocked=false;
-    piece.keys.forEach(function(k){ if(triMap[k]) blocked=true; });
-    if(blocked) return;
-    pieces.push(piece);
-    piece.keys.forEach(function(k){ triMap[k]=piece.color; });
+  // シャッフル
+  for(var i=loaded.length-1;i>0;i--){
+    var j=Math.floor(Math.random()*(i+1));
+    var tmp=loaded[i]; loaded[i]=loaded[j]; loaded[j]=tmp;
+  }
+  // 30msごとに1つずつ追加
+  var total = loaded.length;
+  var duration = 1200;
+  loaded.forEach(function(piece, idx){
+    var delay = total > 1 ? Math.round(idx/(total-1)*duration) : 0;
+    if(idx === total-1) delay = duration;
+    setTimeout(function(){
+      var blocked=false;
+      piece.keys.forEach(function(k){ if(triMap[k]) blocked=true; });
+      if(blocked) return;
+      piece.keys.forEach(function(k){ triMap[k]=piece.color; });
+      fadingPieces.push({
+        keys:piece.keys, color:piece.color,
+        removedAt:Date.now(), fadeIn:true, scaleIn:true, piece:piece
+      });
+      requestAnimationFrame(fadeLoop);
+    }, delay);
   });
-  if(loaded.length) updateStats();
 }
 function updateLangButtons(){
   document.getElementById('btnLangJP').style.borderColor = lang==='jp' ? '#c9a96e' : 'transparent';
