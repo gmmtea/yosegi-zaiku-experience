@@ -892,9 +892,9 @@ function moveGrid(dx_screen, dy_screen){
   var isVertical = dy_screen !== 0;
   var S;
   if(isVertical){
-    S = (globalRotSteps % 2 === 1) ? T : H;
+    S = (globalRotSteps % 2 === 1) ? T/2 : H/2;
   } else {
-    S = (globalRotSteps % 2 === 1) ? H : T;
+    S = (globalRotSteps % 2 === 1) ? H/2 : T/2;
   }
   var dcx = (Math.cos(-a)*dx_screen - Math.sin(-a)*dy_screen) * S;
   var dcy = (Math.sin(-a)*dx_screen + Math.cos(-a)*dy_screen) * S;
