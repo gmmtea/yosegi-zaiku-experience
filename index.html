@@ -137,6 +137,7 @@ canvas{display:block;touch-action:none;width:100% !important;height:auto !import
 /* Modal */
 .ov{display:none;position:fixed;inset:0;background:rgba(74,44,26,.85);z-index:200;align-items:center;justify-content:center;}
 #toast{position:absolute;top:20px;left:50%;transform:translateX(-50%);background:rgba(74,44,26,0.92);color:#f5ede0;font-family:'Noto Serif JP',serif;font-size:15px;padding:10px 20px;border-radius:24px;white-space:nowrap;pointer-events:none;z-index:400;opacity:0;transition:opacity 0.3s;}
+#toastCopy{position:fixed;bottom:40px;left:50%;transform:translateX(-50%);background:rgba(74,44,26,0.92);color:#f5ede0;font-family:'Noto Serif JP',serif;font-size:15px;padding:10px 20px;border-radius:24px;white-space:nowrap;pointer-events:none;z-index:500;opacity:0;transition:opacity 0.3s;}
 .ov.show{display:flex;}
 .mc{background:var(--paper);padding:28px;text-align:center;max-width:440px;width:90%;border-radius:4px;box-shadow:0 20px 60px rgba(0,0,0,.4);}
 .mct{font-family:'Shippori Mincho',serif;font-size:30px;margin-bottom:6px;}
@@ -210,6 +211,7 @@ canvas{display:block;touch-action:none;width:100% !important;height:auto !import
   </footer>
 </div>
 
+<div id="toastCopy"></div>
 <canvas id="confettiCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:300;display:none;"></canvas>
 <div class="ov" id="ovConfirm">
   <div class="mc">
@@ -224,11 +226,36 @@ canvas{display:block;touch-action:none;width:100% !important;height:auto !import
   <div class="mc">
     <div class="mct" id="modalTitle">完成！</div>
     <div class="mcs" id="modalDesc">このデザインを<a href="https://www.kanazashi-woodcraft.com/information.html" target="_blank" style="color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);">寄木体験</a>で形にしましょう。</div>
-    <canvas id="thumb" style="max-width:100%;border:2px solid var(--wm);margin-bottom:14px;display:block;margin-left:auto;margin-right:auto;"></canvas>
-    <div style="display:flex;gap:8px;margin-bottom:14px;">
-      <button class="btn btn-p" id="btnDl" style="flex:1">画像を保存</button>
-      <button class="btn btn-s" id="btnClose" style="flex:1">続けて作る</button>
+    <canvas id="thumb" style="max-width:100%;border:2px solid var(--wm);margin-bottom:16px;display:block;margin-left:auto;margin-right:auto;"></canvas>
+    <div style="display:flex;gap:20px;justify-content:center;margin-bottom:14px;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <button id="btnDl" style="width:60px;height:60px;border-radius:50%;border:none;background:#4a2c1a;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 16l-6-6h4V4h4v6h4l-6 6z" fill="#f5ede0"/>
+            <path d="M4 18h16v2H4v-2z" fill="#f5ede0"/>
+          </svg>
+        </button>
+        <span id="btnDlLabel" style="font-size:13px;color:#8b5e3c;">保存</span>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <button id="btnShare" style="width:60px;height:60px;border-radius:50%;border:none;background:#4a2c1a;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" stroke="#f5ede0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" stroke="#f5ede0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <span id="btnShareLabel" style="font-size:13px;color:#8b5e3c;">URL</span>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <button id="btnX" style="width:60px;height:60px;border-radius:50%;border:none;background:#000;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/>
+          </svg>
+        </button>
+        <span id="btnXLabel" style="font-size:13px;color:#8b5e3c;">Xにシェア</span>
+      </div>
     </div>
+    <button class="btn btn-s" id="btnClose" style="width:100%;margin-bottom:14px;font-size:16px;">続けて作る</button>
     <a id="modalFooterLink" href="https://www.kanazashi-woodcraft.com/information.html" target="_blank"
        style="font-size:16px;color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);padding-bottom:2px;">
       金指ウッドクラフトで寄木体験を予約する →
@@ -266,10 +293,14 @@ var TEXTS = {
     modalTitle:  '完成！',
     modalDesc:   'このデザインを<a href="https://www.kanazashi-woodcraft.com/information.html" target="_blank" style="color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);">寄木体験</a>で形にしましょう。',
     save:        '画像を保存',
+    shareBtn:    'URLをコピー',
+    xShare:      'Xでシェア',
     keepEditing: '続けて作る',
     modalFooter: '金指ウッドクラフトで寄木体験を予約する →',
     shopName:    '金指ウッドクラフト',
     toast:       '↑ 木材を選んでください',
+    copied:      'URLをコピーしました',
+    shareBtn:    'URLをコピー',
   },
   en: {
     title:       'Yosegi-zaiku<br><span style="font-size:0.7em;letter-spacing:0.1em;display:block;margin-bottom:4px;">Design Simulator</span>',
@@ -287,10 +318,14 @@ var TEXTS = {
     modalTitle:  'Done!',
     modalDesc:   'Bring this design to the <a href="https://www.kanazashi-woodcraft.com/information.html" target="_blank" style="color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);">Yosegi-zaiku experience</a>.',
     save:        'Save Image',
+    shareBtn:    'Copy URL',
+    xShare:      'Share on X',
     keepEditing: 'Keep Editing',
     modalFooter: 'Book a Yosegi-zaiku experience at Kanazashi Woodcraft →',
     shopName:    'Kanazashi Woodcraft',
     toast:       '↑ Select a wood',
+    copied:      'URL copied!',
+    shareBtn:    'Copy URL',
   }
 };
 
@@ -310,7 +345,9 @@ function applyLang(){
   document.getElementById('btnConfirmNo').textContent=t.confirmNo;
   document.getElementById('modalTitle').textContent=t.modalTitle;
   document.getElementById('modalDesc').innerHTML=t.modalDesc;
-  document.getElementById('btnDl').textContent=t.save;
+  document.getElementById('btnDlLabel').textContent=t.save;
+  document.getElementById('btnShareLabel').textContent=t.shareBtn;
+  document.getElementById('btnXLabel').textContent=t.xShare;
   document.getElementById('btnClose').textContent=t.keepEditing;
   document.getElementById('modalFooterLink').textContent=t.modalFooter;
   document.getElementById('navShopName').textContent=t.shopName;
@@ -635,7 +672,9 @@ var animGridOffY = gridOffY;
 var animT        = T;
 var animH        = H;
 var animating    = false;
-var LERP         = 0.18; // smoothing factor (0=instant, 1=no movement)
+var LERP         = 0.18; // smoothing factor
+var LERP_SLOW    = 0.04; // slow lerp for clear reset
+var currentLerp  = LERP;
 
 function lerp(a, b, t){ return a + (b - a) * t; }
 
@@ -645,11 +684,11 @@ function animLoop(){
   var da = targetAngle - animRotAngle;
   while(da >  Math.PI) da -= Math.PI*2;
   while(da < -Math.PI) da += Math.PI*2;
-  animRotAngle += da * LERP;
+  animRotAngle += da * currentLerp;
 
-  animGridOffX = lerp(animGridOffX, gridOffX, LERP);
-  animGridOffY = lerp(animGridOffY, gridOffY, LERP);
-  animT        = lerp(animT, T, LERP);
+  animGridOffX = lerp(animGridOffX, gridOffX, currentLerp);
+  animGridOffY = lerp(animGridOffY, gridOffY, currentLerp);
+  animT        = lerp(animT, T, currentLerp);
   animH        = animT * Math.sqrt(3) / 2;
 
   var done = Math.abs(da) < 0.001
@@ -888,7 +927,22 @@ document.getElementById('btnConfirmYes').addEventListener('click',function(){
     });
   });
 
-  pieces=[];history=[];updateStats();
+  pieces=[];history=[];triMap={};updateStats();
+
+  // 目標値だけ先に変えておく
+  globalRotSteps=1;
+  tIdx=2; T=T_STEPS[tIdx]; H=T*Math.sqrt(3)/2;
+  snapToCenter();
+  updateZoomButtons();
+  // 300ms後にゆっくりカメラを戻す
+  var savedAnimRot=animRotAngle, savedAnimX=animGridOffX, savedAnimY=animGridOffY;
+  var savedAnimT=animT, savedAnimH=animH;
+  setTimeout(function(){
+    animRotAngle=savedAnimRot; animGridOffX=savedAnimX; animGridOffY=savedAnimY;
+    animT=savedAnimT; animH=savedAnimH;
+    startAnim();
+  }, 500);
+
   requestAnimationFrame(clearAnimLoop);
   document.getElementById('ovConfirm').classList.remove('show');
 });
@@ -994,9 +1048,200 @@ document.getElementById('btnClose').addEventListener('click',function(){
 document.getElementById('btnDl').addEventListener('click',function(){
   var a=document.createElement('a');a.download='yosegi.png';a.href=canvas.toDataURL();a.click();
 });
+document.getElementById('btnX').addEventListener('click',function(){
+  var url=getShareUrl();
+  var text=lang==='jp'
+    ? '寄木デザインが完成！\n#金指ウッドクラフト #寄木デザイン'
+    : 'My Yosegi-zaiku coaster design is complete!\n#KanazashiWoodcraft #Yosegi';
+  window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(text)+'&url='+encodeURIComponent(url),'_blank');
+});
 document.getElementById('ov').addEventListener('click',function(e){if(e.target===this) this.classList.remove('show');});
 
-// ── Language toggle ────────────────────────────────────────────
+var copyToastTimer=null;
+function showCopyToast(){
+  var el=document.getElementById('toastCopy');
+  el.textContent=TEXTS[lang].copied;
+  el.style.opacity='1';
+  if(copyToastTimer) clearTimeout(copyToastTimer);
+  copyToastTimer=setTimeout(function(){ el.style.opacity='0'; },1500);
+}
+
+// ── URL share: encode/decode ───────────────────────────────────
+// 1 piece = 17 bits: c(6) r(6) wood(3) faceType(2)
+// faceType: 0=tri, 1=rh0, 2=rh1, 3=rh2
+// c,r stored as offset from grid center (c0,r0) in range -32..31
+
+var SHARE_C0 = Math.round(CW/2 / (T/2));
+var SHARE_R0 = Math.round(CH/2 / H);
+
+function colorToWoodIndex(color){
+  for(var i=0;i<WOODS.length;i++) if(WOODS[i].color===color) return i;
+  return 0;
+}
+
+function rhDirFromKeys(keys){
+  if(keys.length===1) return 0; // tri
+  var c0=+keys[0].split(',')[0], r0=+keys[0].split(',')[1];
+  var c1=+keys[1].split(',')[0], r1=+keys[1].split(',')[1];
+  var up=isUp(c0,r0);
+  var dc=c1-c0, dr=r1-r0;
+  if(up){
+    if(dc===1 &&dr===0) return 1; // rh0
+    if(dc===0 &&dr===1) return 2; // rh1
+    if(dc===-1&&dr===0) return 3; // rh2
+  } else {
+    if(dc===-1&&dr===0) return 1; // rh0
+    if(dc===0 &&dr===-1)return 2; // rh1
+    if(dc===1 &&dr===0) return 3; // rh2
+  }
+  return 0;
+}
+
+function encodePieces(pieces){
+  // pack bits into Uint8Array
+  var bits=[];
+  pieces.forEach(function(piece){
+    var c=+piece.keys[0].split(',')[0]-SHARE_C0;
+    var r=+piece.keys[0].split(',')[1]-SHARE_R0;
+    var wood=colorToWoodIndex(piece.color);
+    var ft=rhDirFromKeys(piece.keys);
+    // clamp to 6-bit signed
+    c=Math.max(-32,Math.min(31,c));
+    r=Math.max(-32,Math.min(31,r));
+    // encode c as 6-bit two's complement
+    var cv=(c+64)&63, rv=(r+64)&63;
+    // push 17 bits: cv(6) rv(6) wood(3) ft(2)
+    for(var i=5;i>=0;i--) bits.push((cv>>i)&1);
+    for(var i=5;i>=0;i--) bits.push((rv>>i)&1);
+    for(var i=2;i>=0;i--) bits.push((wood>>i)&1);
+    for(var i=1;i>=0;i--) bits.push((ft>>i)&1);
+  });
+  // pad to byte boundary
+  while(bits.length%6!==0) bits.push(0);
+  // base64url using 6-bit chars
+  var CHARS='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+  var out='';
+  for(var i=0;i<bits.length;i+=6){
+    var v=0;
+    for(var j=0;j<6;j++) v=(v<<1)|(bits[i+j]||0);
+    out+=CHARS[v];
+  }
+  return out;
+}
+
+function decodePieces(str){
+  var CHARS='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+  var bits=[];
+  for(var i=0;i<str.length;i++){
+    var v=CHARS.indexOf(str[i]);
+    if(v<0) continue;
+    for(var j=5;j>=0;j--) bits.push((v>>j)&1);
+  }
+  var result=[];
+  for(var i=0;i+16<bits.length;i+=17){
+    var cv=0,rv=0,wood=0,ft=0;
+    for(var j=0;j<6;j++) cv=(cv<<1)|bits[i+j];
+    for(var j=0;j<6;j++) rv=(rv<<1)|bits[i+6+j];
+    for(var j=0;j<3;j++) wood=(wood<<1)|bits[i+12+j];
+    for(var j=0;j<2;j++) ft=(ft<<1)|bits[i+15+j];
+    // decode signed 6-bit
+    var c=(cv>=32?cv-64:cv)+SHARE_C0;
+    var r=(rv>=32?rv-64:rv)+SHARE_R0;
+    if(wood<0||wood>=WOODS.length) continue;
+    var color=WOODS[wood].color;
+    var keys,type;
+    if(ft===0){
+      keys=[c+','+r]; type='tri';
+    } else {
+      var dir=['','rh0','rh1','rh2'][ft];
+      var pair=getRhPair(c,r,dir);
+      keys=pair.map(function(p){return p.col+','+p.row;});
+      type='rhombus';
+    }
+    result.push({id:nextId++,type:type,keys:keys,color:color});
+  }
+  return result;
+}
+
+var SHARE_CHARS='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+
+function encodeState(){
+  // rot(4) tIdx(3) offX(6 signed) offY(6 signed) = 19 bits -> 4 chars (24 bits)
+  var offXcol = Math.round((CW/2 - gridOffX) / (T/2));
+  var offYrow  = Math.round((CH/2 - gridOffY) / H);
+  // clamp to 6-bit signed -32..31
+  offXcol = Math.max(-32, Math.min(31, offXcol));
+  offYrow  = Math.max(-32, Math.min(31, offYrow));
+  var bits=[];
+  var rot=((globalRotSteps%12)+12)%12;
+  for(var i=3;i>=0;i--) bits.push((rot>>i)&1);
+  for(var i=2;i>=0;i--) bits.push((tIdx>>i)&1);
+  var cx=(offXcol+64)&63, cy=(offYrow+64)&63;
+  for(var i=5;i>=0;i--) bits.push((cx>>i)&1);
+  for(var i=5;i>=0;i--) bits.push((cy>>i)&1);
+  // pad to 24 bits
+  while(bits.length<24) bits.push(0);
+  var out='';
+  for(var i=0;i<24;i+=6){
+    var v=0; for(var j=0;j<6;j++) v=(v<<1)|bits[i+j];
+    out+=SHARE_CHARS[v];
+  }
+  return out;
+}
+
+function decodeState(str){
+  var bits=[];
+  for(var i=0;i<str.length;i++){
+    var v=SHARE_CHARS.indexOf(str[i]); if(v<0) continue;
+    for(var j=5;j>=0;j--) bits.push((v>>j)&1);
+  }
+  if(bits.length<19) return null;
+  var rot=0; for(var i=0;i<4;i++) rot=(rot<<1)|bits[i];
+  var zi=0;  for(var i=0;i<3;i++) zi=(zi<<1)|bits[4+i];
+  var cx=0;  for(var i=0;i<6;i++) cx=(cx<<1)|bits[7+i];
+  var cy=0;  for(var i=0;i<6;i++) cy=(cy<<1)|bits[13+i];
+  var offXcol = (cx>=32?cx-64:cx);
+  var offYrow  = (cy>=32?cy-64:cy);
+  return {rot:((rot%12)+12)%12, tIdx:Math.max(0,Math.min(4,zi)), offXcol:offXcol, offYrow:offYrow};
+}
+
+function getShareUrl(){
+  var s=encodeState();
+  var d=encodePieces(pieces);
+  return location.origin+location.pathname+'?v='+s+d;
+}
+
+function loadFromUrl(){
+  var mv=location.search.match(/[?&]v=([A-Za-z0-9\-_]+)/);
+  if(!mv) return;
+  var val=mv[1];
+  if(val.length<4) return;
+  var s=val.slice(0,4);
+  var d=val.slice(4);
+  var st=decodeState(s);
+  if(st){
+    globalRotSteps=st.rot;
+    tIdx=st.tIdx;
+    T=T_STEPS[tIdx]; H=T*Math.sqrt(3)/2;
+    COLS=Math.ceil(1800/(T/2))+4;
+    ROWS=Math.ceil(1800/H)+4;
+    gridOffX=CW/2-st.offXcol*(T/2);
+    gridOffY=CH/2-st.offYrow*H;
+    animRotAngle=globalRotSteps*Math.PI/6;
+    animT=T; animH=H;
+    animGridOffX=gridOffX; animGridOffY=gridOffY;
+  }
+  if(!d) return;
+  var loaded=decodePieces(d);
+  loaded.forEach(function(piece){
+    var blocked=false;
+    piece.keys.forEach(function(k){ if(triMap[k]) blocked=true; });
+    if(blocked) return;
+    pieces.push(piece);
+    piece.keys.forEach(function(k){ triMap[k]=piece.color; });
+  });
+  if(loaded.length) updateStats();
+}
 function updateLangButtons(){
   document.getElementById('btnLangJP').style.borderColor = lang==='jp' ? '#c9a96e' : 'transparent';
   document.getElementById('btnLangJP').style.color       = lang==='jp' ? '#c9a96e' : 'rgba(201,169,110,0.4)';
@@ -1005,8 +1250,22 @@ function updateLangButtons(){
 }
 document.getElementById('btnLangJP').addEventListener('click',function(){ lang='jp'; applyLang(); updateLangButtons(); });
 document.getElementById('btnLangEN').addEventListener('click',function(){ lang='en'; applyLang(); updateLangButtons(); });
+
+document.getElementById('btnShare').addEventListener('click',function(){
+  var url=getShareUrl();
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(url).then(function(){ showCopyToast(); });
+  } else {
+    var ta=document.createElement('textarea');
+    ta.value=url; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+    showCopyToast();
+  }
+});
+
 applyLang();
 updateLangButtons();
+loadFromUrl();
 render();
 })();
 </script>
