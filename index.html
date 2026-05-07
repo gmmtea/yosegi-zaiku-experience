@@ -65,6 +65,7 @@ h1{font-family:'Shippori Mincho',serif;font-size:clamp(28px,7vw,52px);letter-spa
 }
 .cbox{
   background:#fff8f0;
+  position:relative;
   border:1px solid var(--wm);
   box-shadow:3px 3px 0 var(--wm),6px 6px 0 rgba(139,94,60,.15);
   border-radius:2px;overflow:hidden;
@@ -180,7 +181,7 @@ canvas{display:block;touch-action:none;width:100% !important;height:auto !import
 
   <!-- Canvas -->
   <div class="canvas-wrap">
-    <div class="cbox"><canvas id="c"></canvas></div>
+    <div class="cbox"><canvas id="c"></canvas><canvas id="scatterCanvas" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;"></canvas></div>
     <div id="toast"></div>
     <button class="rot-btn" id="rotL">↺</button>
     <button class="rot-btn" id="rotR">↻</button>
@@ -672,9 +673,39 @@ var animGridOffY = gridOffY;
 var animT        = T;
 var animH        = H;
 var animating    = false;
-var LERP         = 0.18; // smoothing factor
-var LERP_SLOW    = 0.04; // slow lerp for clear reset
+var LERP         = 0.18;
 var currentLerp  = LERP;
+
+var clearResetAnim = null;
+function startClearReset(fromRot, fromX, fromY, fromTv, duration){
+  if(clearResetAnim) clearResetAnim.active=false;
+  var startTime = Date.now();
+  var toRot = globalRotSteps * Math.PI / 6;
+  var toX = gridOffX, toY = gridOffY, toTv = T;
+  clearResetAnim = {active:true};
+  var anim = clearResetAnim;
+  function easeInOut(t){ return t<0.5 ? 2*t*t : -1+(4-2*t)*t; }
+  animating = true;
+  (function loop(){
+    if(!anim.active){ animating=false; return; }
+    var t = Math.min((Date.now()-startTime)/duration, 1);
+    var e = easeInOut(t);
+    animRotAngle  = fromRot + (toRot - fromRot) * e;
+    animGridOffX  = fromX   + (toX   - fromX)   * e;
+    animGridOffY  = fromY   + (toY   - fromY)   * e;
+    animT         = fromTv  + (toTv  - fromTv)  * e;
+    animH         = animT * Math.sqrt(3) / 2;
+    renderWithAnim();
+    if(t < 1) requestAnimationFrame(loop);
+    else {
+      animRotAngle=toRot; animGridOffX=toX; animGridOffY=toY;
+      animT=toTv; animH=H;
+      anim.active=false;
+      animating=false;
+      renderWithAnim();
+    }
+  })();
+}
 
 function lerp(a, b, t){ return a + (b - a) * t; }
 
@@ -710,6 +741,7 @@ function animLoop(){
 }
 
 function startAnim(){
+  if(clearResetAnim) clearResetAnim.active=false;
   if(!animating){ animating=true; requestAnimationFrame(animLoop); }
 }
 
@@ -912,38 +944,124 @@ document.getElementById('btnConfirmYes').addEventListener('click',function(){
   var now=Date.now();
   var ANIM_MS=2000;
 
+  // グリッド→スクリーン座標変換（現在のanim値で）
+  var _angle=animRotAngle;
+  var cosA=Math.cos(_angle), sinA=Math.sin(_angle);
+  var scaleX=animT/(T_STEPS[2]), scaleY=animH/(T_STEPS[2]*Math.sqrt(3)/2);
+  function toScreen(gx, gy){
+    // animGridOffX/Y, animT/H でのグリッド座標→キャンバス座標
+    var px = animGridOffX + gx * animT/2;
+    var py = animGridOffY + gy * animH;
+    // 回転
+    var dx=px-CW/2, dy=py-CH/2;
+    return {
+      x: CW/2 + cosA*dx - sinA*dy,
+      y: CH/2 + sinA*dx + cosA*dy
+    };
+  }
+  function getScreenVerts(c,r){
+    // getVertsのグリッド座標をスクリーン座標に変換
+    var x0=animGridOffX+c*(animT/2)-animT/2, y0=animGridOffY+r*animH;
+    var pts;
+    if((c+r)%2===0){
+      pts=[ {x:x0+animT/2,y:y0}, {x:x0+animT,y:y0+animH}, {x:x0,y:y0+animH} ];
+    } else {
+      pts=[ {x:x0,y:y0}, {x:x0+animT,y:y0}, {x:x0+animT/2,y:y0+animH} ];
+    }
+    return pts.map(function(p){
+      var dx=p.x-CW/2, dy=p.y-CH/2;
+      return { x:CW/2+cosA*dx-sinA*dy, y:CH/2+sinA*dx+cosA*dy };
+    });
+  }
+
+  // scatter canvas を用意
+  var scatterCanvas=document.getElementById('scatterCanvas');
+  scatterCanvas.width=CW; scatterCanvas.height=CH;
+  var sctx=scatterCanvas.getContext('2d');
+
+  var scatterPieces=[];
   pieces.forEach(function(piece){
     piece.keys.forEach(function(k){delete triMap[k];});
-    var ct=getCenter(+piece.keys[0].split(',')[0], +piece.keys[0].split(',')[1]);
+    var p0=piece.keys[0].split(',');
+    var c0=+p0[0], r0=+p0[1];
+    var sc=toScreen(
+      animGridOffX + c0*(animT/2),
+      animGridOffY + r0*animH
+    );
+    // 実際の中心はgetVertsから
+    var allVerts=piece.keys.reduce(function(acc,k){
+      var p=k.split(',');
+      return acc.concat(getScreenVerts(+p[0],+p[1]));
+    },[]);
+    var cx=allVerts.reduce(function(s,v){return s+v.x;},0)/allVerts.length;
+    var cy=allVerts.reduce(function(s,v){return s+v.y;},0)/allVerts.length;
+
     var angle=Math.random()*Math.PI*2;
     var spd=0.1+Math.random()*0.5;
-    fadingPieces.push({
+    scatterPieces.push({
       keys:piece.keys, color:piece.color, removedAt:now,
-      clearAnim:true, animMs:ANIM_MS,
-      cx:ct.x, cy:ct.y,
+      animMs:ANIM_MS,
+      cx:cx, cy:cy,
       vx:Math.cos(angle)*spd,
       vy:Math.sin(angle)*spd,
-      spin:(Math.random()-0.5)*0.1
+      spin:(Math.random()-0.5)*0.1,
+      screenVerts: piece.keys.map(function(k){
+        var p=k.split(','); return getScreenVerts(+p[0],+p[1]);
+      })
     });
   });
 
   pieces=[];history=[];triMap={};updateStats();
+  renderWithAnim(); // 即座にcanvas1からピースを消す
 
-  // 目標値だけ先に変えておく
+  // カメラをリセット
   globalRotSteps=1;
   tIdx=2; T=T_STEPS[tIdx]; H=T*Math.sqrt(3)/2;
   snapToCenter();
   updateZoomButtons();
-  // 300ms後にゆっくりカメラを戻す
   var savedAnimRot=animRotAngle, savedAnimX=animGridOffX, savedAnimY=animGridOffY;
   var savedAnimT=animT, savedAnimH=animH;
   setTimeout(function(){
     animRotAngle=savedAnimRot; animGridOffX=savedAnimX; animGridOffY=savedAnimY;
     animT=savedAnimT; animH=savedAnimH;
-    startAnim();
-  }, 500);
+    startClearReset(savedAnimRot, savedAnimX, savedAnimY, savedAnimT, 800);
+  }, 200);
 
-  requestAnimationFrame(clearAnimLoop);
+  // scatter animation on separate canvas
+  var startTime=Date.now();
+  (function scatterLoop(){
+    var now2=Date.now();
+    var elapsed=now2-startTime;
+    sctx.clearRect(0,0,CW,CH);
+    var any=false;
+    scatterPieces.forEach(function(fp){
+      var t=Math.min(elapsed/fp.animMs,1);
+      var alpha=t>0.8?1-(t-0.8)/0.2:1;
+      if(alpha<=0) return;
+      any=true;
+      var tx=fp.vx*elapsed*0.5+fp.vx*elapsed*elapsed*0.003;
+      var ty=fp.vy*elapsed*0.5+fp.vy*elapsed*elapsed*0.003;
+      var rot=fp.spin*elapsed*0.05+fp.spin*elapsed*elapsed*0.0003;
+      sctx.save();
+      sctx.globalAlpha=alpha;
+      sctx.translate(fp.cx+tx, fp.cy+ty);
+      sctx.rotate(rot);
+      sctx.translate(-fp.cx, -fp.cy);
+      fp.screenVerts.forEach(function(verts){
+        sctx.beginPath();
+        sctx.moveTo(verts[0].x,verts[0].y);
+        sctx.lineTo(verts[1].x,verts[1].y);
+        sctx.lineTo(verts[2].x,verts[2].y);
+        sctx.closePath();
+        sctx.fillStyle=fp.color; sctx.fill();
+        sctx.strokeStyle='rgba(255,255,255,0.6)'; sctx.lineWidth=1; sctx.stroke();
+      });
+      sctx.restore();
+    });
+    if(any) requestAnimationFrame(scatterLoop);
+    else sctx.clearRect(0,0,CW,CH);
+  })();
+
   document.getElementById('ovConfirm').classList.remove('show');
 });
 
