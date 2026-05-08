@@ -132,8 +132,9 @@ canvas{display:block;touch-action:none;width:100% !important;height:auto !import
 }
 .btn-p{background:var(--wd);color:var(--paper);}
 .btn-p:hover{background:var(--wdp);}
-.btn-s{background:transparent;color:var(--wd);border:1.5px solid var(--wm);}
+.btn-s{background:transparent;color:var(--wd);border:1.5px solid var(--wm);cursor:pointer;}
 .btn-s:hover{border-color:var(--wd);background:var(--wl);}
+.btn-s:disabled{opacity:0.3;pointer-events:none;}
 
 /* Modal */
 .ov{display:none;position:fixed;inset:0;background:rgba(74,44,26,.85);z-index:200;align-items:center;justify-content:center;}
@@ -632,9 +633,8 @@ function fadeLoop(){
     var ms = fp.fadeIn ? FADE_IN_MS : FADE_MS;
     var done = now-fp.removedAt >= ms;
     if(done && fp.fadeIn && fp.piece){
-      // fadeIn complete: now add to pieces for real
       pieces.push(fp.piece);
-      fp.piece.keys.forEach(function(k){triMap[k]=fp.piece.color;});
+      history.push({action:'add', piece:fp.piece});
       updateStats();
     }
     return !done;
@@ -665,6 +665,7 @@ function updateStats(){
   var n=pieces.length;
   document.getElementById('cnt').textContent=n;
   document.getElementById('pf').style.width=Math.min(n/40*100,100)+'%';
+  document.getElementById('btnUndo').disabled=history.length===0;
 }
 
 // ── Animation ──────────────────────────────────────────────────
@@ -1172,16 +1173,23 @@ document.getElementById('btnDone').addEventListener('click',function(){
   thumb.style.width='100%'; thumb.style.height='auto';
   var tctx=thumb.getContext('2d');
   tctx.drawImage(canvas,0,0,CW,CH,0,0,CW,CH);
-  var logo=new Image();
-  logo.onload=function(){
-    var lw=120, lh=lw*(logo.naturalHeight/logo.naturalWidth);
-    var margin=12;
-    tctx.globalAlpha=0.7;
-    tctx.drawImage(logo, CW-lw-margin, CH-lh-margin, lw, lh);
-    tctx.globalAlpha=1.0;
-  };
-  logo.onerror=function(){};
-  logo.src='logo.png';
+  function drawLogo(){
+    if(logoImg.naturalWidth>0){
+      var lw=120, lh=lw*(logoImg.naturalHeight/logoImg.naturalWidth);
+      var margin=12;
+      tctx.globalAlpha=0.7;
+      tctx.drawImage(logoImg, CW-lw-margin, CH-lh-margin, lw, lh);
+      tctx.globalAlpha=1.0;
+    }
+  }
+  if(logoImg.complete && logoImg.naturalWidth>0){
+    drawLogo();
+  } else {
+    var fallback=new Image();
+    fallback.onload=function(){ logoImg=fallback; drawLogo(); };
+    fallback.onerror=function(){};
+    fallback.src='logo.png';
+  }
   launchConfetti();
 });
 document.getElementById('btnClose').addEventListener('click',function(){
@@ -1210,7 +1218,9 @@ function showCopyToast(){
   copyToastTimer=setTimeout(function(){ el.style.opacity='0'; },1500);
 }
 
-// ── URL share: encode/decode ───────────────────────────────────
+// ── ロゴのプリロード ──────────────────────────────────────────
+var logoImg=new Image();
+logoImg.src='logo.png';
 // 1 piece = 17 bits: c(6) r(6) wood(3) faceType(2)
 // faceType: 0=tri, 1=rh0, 2=rh1, 3=rh2
 // c,r stored as offset from grid center (c0,r0) in range -32..31
@@ -1392,7 +1402,7 @@ function loadFromUrl(){
       var blocked=false;
       piece.keys.forEach(function(k){ if(triMap[k]) blocked=true; });
       if(blocked) return;
-      piece.keys.forEach(function(k){ triMap[k]=piece.color; });
+      piece.keys.forEach(function(k){ triMap[k]=piece.color; }); // 仮登録
       fadingPieces.push({
         keys:piece.keys, color:piece.color,
         removedAt:Date.now(), fadeIn:true, scaleIn:true, piece:piece
