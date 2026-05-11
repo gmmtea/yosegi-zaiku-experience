@@ -158,7 +158,7 @@ canvas{display:block;touch-action:none;width:100% !important;height:auto !import
 </nav>
 <header>
   <h1>箱根寄木細工体験</h1>
-  <p id="headerDesc" style="font-size:16px;color:var(--wd);margin-top:6px;opacity:.8;"><a href="https://www.kanazashi-woodcraft.com/information.html" target="_blank" style="color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);">箱根寄木細工のコースター作り</a>に向けて、デザインを考えてみましょう。</p>
+  <p id="headerDesc" style="font-size:16px;color:var(--wd);margin-top:6px;opacity:.8;"><a href="https://www.jalan.net/kankou/spt_guide000000168896/" target="_blank" style="color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);">箱根寄木細工のコースター作り</a>に向けて、デザインを考えてみましょう。</p>
 </header>
 
 <div class="wrap">
@@ -206,9 +206,14 @@ canvas{display:block;touch-action:none;width:100% !important;height:auto !import
   </div>
 
   <footer style="text-align:center;margin-top:20px;padding-bottom:8px;">
-    <a id="footerLink" href="https://www.kanazashi-woodcraft.com/information.html" target="_blank"
+    <a id="footerLink" href="https://www.jalan.net/kankou/spt_guide000000168896/" target="_blank"
        style="font-size:16px;color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);padding-bottom:2px;">
       金指ウッドクラフトで寄木体験を予約する →
+    </a>
+    <br><br>
+    <a id="footerPurchaseLink" href="https://kanazashi-woodcraft.raku-uru.jp/item-detail/783250" target="_blank"
+       style="font-size:16px;color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);padding-bottom:2px;">
+      寄木体験セットを購入する →
     </a>
   </footer>
 </div>
@@ -227,7 +232,7 @@ canvas{display:block;touch-action:none;width:100% !important;height:auto !import
 <div class="ov" id="ov">
   <div class="mc">
     <div class="mct" id="modalTitle">完成！</div>
-    <div class="mcs" id="modalDesc">このデザインを<a href="https://www.kanazashi-woodcraft.com/information.html" target="_blank" style="color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);">寄木体験</a>で形にしましょう。</div>
+    <div class="mcs" id="modalDesc">このデザインを<a href="https://www.jalan.net/kankou/spt_guide000000168896/" target="_blank" style="color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);">寄木体験</a>で形にしましょう。</div>
     <canvas id="thumb" style="max-width:100%;border:2px solid var(--wm);margin-bottom:16px;display:block;margin-left:auto;margin-right:auto;"></canvas>
     <div style="display:flex;gap:20px;justify-content:center;margin-bottom:14px;">
       <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
@@ -258,9 +263,14 @@ canvas{display:block;touch-action:none;width:100% !important;height:auto !import
       </div>
     </div>
     <button class="btn btn-s" id="btnClose" style="width:100%;margin-bottom:14px;font-size:16px;">続けて作る</button>
-    <a id="modalFooterLink" href="https://www.kanazashi-woodcraft.com/information.html" target="_blank"
+    <a id="modalFooterLink" href="https://www.jalan.net/kankou/spt_guide000000168896/" target="_blank"
        style="font-size:16px;color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);padding-bottom:2px;">
       金指ウッドクラフトで寄木体験を予約する →
+    </a>
+    <br><br>
+    <a id="modalPurchaseLink" href="https://kanazashi-woodcraft.raku-uru.jp/item-detail/783250" target="_blank"
+       style="font-size:16px;color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);padding-bottom:2px;">
+      寄木体験セットを購入する →
     </a>
   </div>
 </div>
@@ -281,19 +291,20 @@ var lang = 'jp';
 var TEXTS = {
   jp: {
     title:       '箱根寄木細工体験<br><span style="font-size:0.7em;letter-spacing:0.1em;display:block;margin-bottom:4px;">デザインシミュレーター</span>',
-    desc:        '<a href="https://www.kanazashi-woodcraft.com/information.html" target="_blank" style="color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);">箱根寄木細工のコースター作り</a>に向けて、デザインを考えてみましょう。',
+    desc:        '<a href="https://www.jalan.net/kankou/spt_guide000000168896/" target="_blank" style="color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);">箱根寄木細工のコースター作り</a>に向けて、デザインを考えてみましょう。',
     eraser:      '消去',
     pieces:      'ピース:',
     undo:        '↩ 一つ戻す',
     clear:       '✕ 全消去',
     done:        '完成！',
     footer:      '金指ウッドクラフトで寄木体験を予約する →',
+    purchase:    '寄木体験セットを購入する →',
     confirmTitle:'全消去しますか？',
     confirmDesc: '置いたピースがすべて消えます。',
     confirmYes:  '消去する',
     confirmNo:   'キャンセル',
     modalTitle:  '完成！',
-    modalDesc:   'このデザインを<a href="https://www.kanazashi-woodcraft.com/information.html" target="_blank" style="color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);">寄木体験</a>で形にしましょう。',
+    modalDesc:   'このデザインを<a href="https://www.jalan.net/kankou/spt_guide000000168896/" target="_blank" style="color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);">寄木体験</a>で形にしましょう。',
     save:        '画像を保存',
     shareBtn:    '保存用URL',
     xShare:      'Xでシェア',
@@ -306,19 +317,20 @@ var TEXTS = {
   },
   en: {
     title:       'Yosegi-zaiku<br><span style="font-size:0.7em;letter-spacing:0.1em;display:block;margin-bottom:4px;">Design Simulator</span>',
-    desc:        'Design your coaster for the <a href="https://www.kanazashi-woodcraft.com/information.html" target="_blank" style="color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);">Hakone Yosegi-zaiku experience</a>.',
+    desc:        'Design your coaster for the <a href="https://www.jalan.net/kankou/spt_guide000000168896/" target="_blank" style="color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);">Hakone Yosegi-zaiku experience</a>.',
     eraser:      'Erase',
     pieces:      'Pieces:',
     undo:        '↩ Undo',
     clear:       '✕ Clear',
     done:        'Done!',
     footer:      'Book a Yosegi-zaiku experience at Kanazashi Woodcraft →',
+    purchase:    'Buy a Yosegi-zaiku experience set →',
     confirmTitle:'Clear all?',
     confirmDesc: 'All placed pieces will be removed.',
     confirmYes:  'Clear',
     confirmNo:   'Cancel',
     modalTitle:  'Done!',
-    modalDesc:   'Bring this design to the <a href="https://www.kanazashi-woodcraft.com/information.html" target="_blank" style="color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);">Yosegi-zaiku experience</a>.',
+    modalDesc:   'Bring this design to the <a href="https://www.jalan.net/kankou/spt_guide000000168896/" target="_blank" style="color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);">Yosegi-zaiku experience</a>.',
     save:        'Save Image',
     shareBtn:    'Restore URL',
     xShare:      'Share on X',
@@ -341,6 +353,7 @@ function applyLang(){
   document.getElementById('btnClear').innerHTML=t.clear;
   document.getElementById('btnDone').textContent=t.done;
   document.getElementById('footerLink').textContent=t.footer;
+  document.getElementById('footerPurchaseLink').textContent=t.purchase;
   document.getElementById('confirmTitle').textContent=t.confirmTitle;
   document.getElementById('confirmDesc').textContent=t.confirmDesc;
   document.getElementById('btnConfirmYes').textContent=t.confirmYes;
@@ -352,6 +365,7 @@ function applyLang(){
   document.getElementById('btnXLabel').textContent=t.xShare;
   document.getElementById('btnClose').textContent=t.keepEditing;
   document.getElementById('modalFooterLink').textContent=t.modalFooter;
+  document.getElementById('modalPurchaseLink').textContent=t.purchase;
   document.getElementById('navShopName').textContent=t.shopName;
   document.querySelectorAll('.wood-name').forEach(function(el,i){
     el.textContent=WOODS[i][lang];
@@ -574,17 +588,243 @@ canvas.addEventListener('mousemove',function(e){
 
 canvas.addEventListener('mouseleave',function(){selCell=null;render();});
 
-// Touch: update hover on touchmove
-canvas.addEventListener('touchmove',function(e){
+// ── Touch gesture handling ──────────────────────────────────────
+var touchState = null; // 'tap','drag1','drag2','piece'
+var touchStart = null;
+var lastTouches = null;
+var dragPiece = null;
+var DRAG_THRESHOLD = 8; // px before switching to drag mode
+
+function getTouchCanvasPos(touch){
+  var rect=canvas.getBoundingClientRect();
+  var sx=CW/rect.width, sy=CH/rect.height;
+  var cx=(touch.clientX-rect.left)*sx;
+  var cy=(touch.clientY-rect.top)*sy;
+  var a=globalRotSteps*Math.PI/6;
+  var dx=cx-CW/2, dy=cy-CH/2;
+  var co=Math.cos(-a), si=Math.sin(-a);
+  return {x:co*dx-si*dy+CW/2, y:si*dx+co*dy+CH/2};
+}
+
+function getTouchRawPos(touch){
+  // 回転変換なし（ドラッグ量計算用）
+  var rect=canvas.getBoundingClientRect();
+  var sx=CW/rect.width, sy=CH/rect.height;
+  return {x:(touch.clientX-rect.left)*sx, y:(touch.clientY-rect.top)*sy};
+}
+
+function touchDist(t1,t2){
+  var dx=t1.clientX-t2.clientX, dy=t1.clientY-t2.clientY;
+  return Math.sqrt(dx*dx+dy*dy);
+}
+
+function touchAngle(t1,t2){
+  return Math.atan2(t2.clientY-t1.clientY, t2.clientX-t1.clientX);
+}
+
+function touchMidCanvas(t1,t2){
+  var rect=canvas.getBoundingClientRect();
+  var scaleX=CW/rect.width, scaleY=CH/rect.height;
+  return {
+    x:((t1.clientX+t2.clientX)/2-rect.left)*scaleX,
+    y:((t1.clientY+t2.clientY)/2-rect.top)*scaleY
+  };
+}
+
+function touchMidRaw(t1,t2){
+  var rect=canvas.getBoundingClientRect();
+  var scaleX=CW/rect.width, scaleY=CH/rect.height;
+  return {
+    x:((t1.clientX+t2.clientX)/2-rect.left)*scaleX,
+    y:((t1.clientY+t2.clientY)/2-rect.top)*scaleY
+  };
+}
+
+function snapGridPos(){
+  var baseX=CW/2, baseY=CH/2;
+  var a=globalRotSteps*Math.PI/6;
+  // moveGridの格子基底ベクトル
+  var v1x=Math.sin(a)*(T/2),  v1y=Math.cos(a)*(T/2);   // 垂直方向ステップ
+  var v2x=Math.cos(a)*(H/2),  v2y=-Math.sin(a)*(H/2);  // 水平方向ステップ
+  // (gridOffX-baseX, gridOffY-baseY) を格子座標に変換
+  var px=gridOffX-baseX, py=gridOffY-baseY;
+  var det=v1x*v2y-v2x*v1y;
+  var n=Math.round((v2y*px-v2x*py)/det);
+  var m=Math.round((-v1y*px+v1x*py)/det);
+  gridOffX=baseX+n*v1x+m*v2x;
+  gridOffY=baseY+n*v1y+m*v2y;
+}
+
+canvas.addEventListener('touchstart',function(e){
   e.preventDefault();
-  if(!selShape) return;
-  var p=canvasPos(e);
-  selCell=hitTest(p.x,p.y);
-  if(selCell&&selShape==='rhombus') hoverDir=bestRhDir(selCell.col,selCell.row,p.x,p.y);
-  render();
+  var ts=e.touches;
+  if(ts.length===1){
+    var p=getTouchCanvasPos(ts[0]);
+    var raw=getTouchRawPos(ts[0]);
+    touchStart={x:raw.x, y:raw.y, px:p.x, py:p.y, gridOffX:gridOffX, gridOffY:gridOffY};
+    lastTouches=null;
+    var cell=hitTest(p.x,p.y);
+    if(cell && triMap[cell.col+','+cell.row] && !eraserMode && !selShape){
+      touchState='piece';
+      dragPiece={cell:cell, startPos:p};
+    } else {
+      touchState='tap';
+    }
+  } else if(ts.length===2){
+    touchState='drag2';
+    var mid=touchMidRaw(ts[0],ts[1]);
+    lastTouches={
+      dist:touchDist(ts[0],ts[1]),
+      angle:touchAngle(ts[0],ts[1]),
+      mid:mid,
+      gridOffX:gridOffX, gridOffY:gridOffY,
+      tIdx:tIdx, rotSteps:globalRotSteps
+    };
+  }
 },{passive:false});
 
-// Click / tap to place or erase
+canvas.addEventListener('touchmove',function(e){
+  e.preventDefault();
+  var ts=e.touches;
+
+  if(touchState==='tap' || touchState==='piece'){
+    if(ts.length===1 && touchStart){
+      var raw=getTouchRawPos(ts[0]);
+      var dx=raw.x-touchStart.x, dy=raw.y-touchStart.y;
+      if(Math.sqrt(dx*dx+dy*dy)>DRAG_THRESHOLD){
+        if(touchState==='piece' && dragPiece){
+          touchState='piece-drag';
+        } else {
+          touchState='drag1';
+        }
+      }
+    }
+  }
+
+  if(touchState==='drag1' && ts.length===1 && touchStart){
+    var raw=getTouchRawPos(ts[0]);
+    var dx=raw.x-touchStart.x, dy=raw.y-touchStart.y;
+    // 指の移動量を逆回転してgridOff座標系に変換
+    var a=animRotAngle;
+    gridOffX=touchStart.gridOffX+(Math.cos(a)*dx+Math.sin(a)*dy);
+    gridOffY=touchStart.gridOffY+(-Math.sin(a)*dx+Math.cos(a)*dy);
+    animGridOffX=gridOffX; animGridOffY=gridOffY;
+    selCell=null;
+    renderWithAnim();
+  }
+
+  if(touchState==='drag2' && ts.length===2 && lastTouches){
+    var newDist=touchDist(ts[0],ts[1]);
+    var newAngle=touchAngle(ts[0],ts[1]);
+    var newMid=touchMidRaw(ts[0],ts[1]);
+    var pivot=lastTouches.mid;
+
+    // zoom: アナログ表示（指の中心を基準にスケール）
+    var ratio=newDist/lastTouches.dist;
+    var targetT=T_STEPS[lastTouches.tIdx]*ratio;
+    targetT=Math.max(T_STEPS[0], Math.min(T_STEPS[T_STEPS.length-1], targetT));
+    // pivot基準でgridOffをスケール
+    var fx=(pivot.x-lastTouches.gridOffX)/(T_STEPS[lastTouches.tIdx]/2);
+    var fy=(pivot.y-lastTouches.gridOffY)/(T_STEPS[lastTouches.tIdx]*Math.sqrt(3)/2);
+    var newH=targetT*Math.sqrt(3)/2;
+    var zoomedOffX=pivot.x-fx*(targetT/2);
+    var zoomedOffY=pivot.y-fy*newH;
+    animT=targetT; animH=newH;
+
+    // rotation: アナログ表示（指の中心を基準に回転）
+    var dAngle=newAngle-lastTouches.angle;
+    animRotAngle=lastTouches.rotSteps*Math.PI/6+dAngle;
+
+    var pdx=newMid.x-pivot.x, pdy=newMid.y-pivot.y;
+    var a3=lastTouches.rotSteps*Math.PI/6;
+    gridOffX=zoomedOffX+(Math.cos(a3)*pdx+Math.sin(a3)*pdy);
+    gridOffY=zoomedOffY+(-Math.sin(a3)*pdx+Math.cos(a3)*pdy);
+    animGridOffX=gridOffX; animGridOffY=gridOffY;
+
+    renderWithAnim();
+  }
+
+  if(touchState==='piece-drag' && ts.length===1){
+    var p=getTouchCanvasPos(ts[0]);
+    selCell=hitTest(p.x,p.y);
+    if(selCell&&selShape==='rhombus') hoverDir=bestRhDir(selCell.col,selCell.row,p.x,p.y);
+    render();
+  }
+
+  // normal hover
+  if(touchState==='tap' && selShape && ts.length===1){
+    var p=getTouchCanvasPos(ts[0]);
+    selCell=hitTest(p.x,p.y);
+    if(selCell&&selShape==='rhombus') hoverDir=bestRhDir(selCell.col,selCell.row,p.x,p.y);
+    render();
+  }
+},{passive:false});
+
+canvas.addEventListener('touchend',function(e){
+  e.preventDefault();
+  if(touchState==='tap'){
+    var p={x:touchStart.px, y:touchStart.py};
+    var cell=hitTest(p.x,p.y);
+    if(cell){
+      if(eraserMode){
+        removePieceAt(cell.col,cell.row);
+      } else if(!selShape){
+        showToast();
+      } else {
+        if(selShape==='rhombus') hoverDir=bestRhDir(cell.col,cell.row,p.x,p.y);
+        doPlace(cell.col,cell.row);startAnim();
+      }
+    }
+  } else if(touchState==='drag1'){
+    snapGridPos();
+    startAnim();
+  } else if(touchState==='drag2'){
+    // snap zoom to nearest T_STEPS
+    var bestIdx=tIdx;
+    var bestDiff=Infinity;
+    T_STEPS.forEach(function(s,i){
+      var d=Math.abs(s-animT);
+      if(d<bestDiff){bestDiff=d;bestIdx=i;}
+    });
+    tIdx=bestIdx; T=T_STEPS[tIdx]; H=T*Math.sqrt(3)/2;
+    updateZoomButtons();
+    // snap rotation to nearest 30deg
+    var snapRot=Math.round(animRotAngle/(Math.PI/6));
+    globalRotSteps=((snapRot%12)+12)%12;
+    // snap pan
+    snapGridPos();
+    startAnim();
+  } else if(touchState==='piece-drag' && selCell){
+    // move piece to new location
+    if(dragPiece){
+      var oldCell=dragPiece.cell;
+      var key=oldCell.col+','+oldCell.row;
+      for(var i=pieces.length-1;i>=0;i--){
+        if(pieces[i].keys.indexOf(key)>=0){
+          var piece=pieces[i];
+          // check target is free
+          var blocked=false;
+          piece.keys.forEach(function(k){ if(triMap[k]&&pieces[i].keys.indexOf(k)<0) blocked=true; });
+          if(!blocked && selCell){
+            // remove from old position
+            piece.keys.forEach(function(k){delete triMap[k];});
+            pieces.splice(i,1);
+            history.push({action:'remove',piece:piece});
+            // place at new position
+            if(selShape==='rhombus') hoverDir=bestRhDir(selCell.col,selCell.row,0,0);
+            doPlace(selCell.col,selCell.row);
+            startAnim();
+          }
+          break;
+        }
+      }
+    }
+  }
+  touchState=null; touchStart=null; lastTouches=null; dragPiece=null;
+  selCell=null; render();
+},{passive:false});
+
+// Click / tap to place or erase (mouse only)
 var toastTimer=null;
 function showToast(){
   var el=document.getElementById('toast');
@@ -595,6 +835,7 @@ function showToast(){
 }
 
 canvas.addEventListener('click',function(e){
+  if(e.pointerType==='touch') return; // handled by touch events
   var p=canvasPos(e),cell=hitTest(p.x,p.y);if(!cell) return;
   if(eraserMode){
     removePieceAt(cell.col,cell.row);return;
@@ -634,7 +875,7 @@ function fadeLoop(){
     var done = now-fp.removedAt >= ms;
     if(done && fp.fadeIn && fp.piece){
       pieces.push(fp.piece);
-      history.push({action:'add', piece:fp.piece});
+      if(!fp.noHistory) history.push({action:'add', piece:fp.piece});
       updateStats();
     }
     return !done;
@@ -948,8 +1189,9 @@ document.getElementById('btnUndo').addEventListener('click',function(){
     fadingPieces.push({keys:entry.piece.keys,color:entry.piece.color,removedAt:Date.now()});
     updateStats();requestAnimationFrame(fadeLoop);
   } else {
-    // undo remove: fade in, then add to pieces after animation
-    fadingPieces.push({keys:entry.piece.keys,color:entry.piece.color,removedAt:Date.now(),fadeIn:true,piece:entry.piece});
+    // undo remove: triMapに仮登録してからfadeIn
+    entry.piece.keys.forEach(function(k){triMap[k]=entry.piece.color;});
+    fadingPieces.push({keys:entry.piece.keys,color:entry.piece.color,removedAt:Date.now(),fadeIn:true,piece:entry.piece,noHistory:true});
     updateStats();requestAnimationFrame(fadeLoop);
   }
 });
