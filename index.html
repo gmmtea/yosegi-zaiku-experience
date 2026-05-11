@@ -157,7 +157,9 @@ canvas{display:block;touch-action:none;width:100% !important;height:auto !import
   </div>
 </nav>
 <header>
-  <h1>箱根寄木細工体験</h1>
+  <a href="/" style="text-decoration:none;color:inherit;">
+    <h1>箱根寄木細工体験</h1>
+  </a>
   <p id="headerDesc" style="font-size:16px;color:var(--wd);margin-top:6px;opacity:.8;"><a href="https://www.jalan.net/kankou/spt_guide000000168896/" target="_blank" style="color:var(--wd);text-decoration:none;border-bottom:1px solid var(--wm);">箱根寄木細工のコースター作り</a>に向けて、デザインを考えてみましょう。</p>
 </header>
 
@@ -736,7 +738,7 @@ canvas.addEventListener('touchmove',function(e){
     animRotAngle=lastTouches.rotSteps*Math.PI/6+dAngle;
 
     var pdx=newMid.x-pivot.x, pdy=newMid.y-pivot.y;
-    var a3=lastTouches.rotSteps*Math.PI/6;
+    var a3=animRotAngle;
     gridOffX=zoomedOffX+(Math.cos(a3)*pdx+Math.sin(a3)*pdy);
     gridOffY=zoomedOffY+(-Math.sin(a3)*pdx+Math.cos(a3)*pdy);
     animGridOffX=gridOffX; animGridOffY=gridOffY;
@@ -779,19 +781,25 @@ canvas.addEventListener('touchend',function(e){
     snapGridPos();
     startAnim();
   } else if(touchState==='drag2'){
-    // snap zoom to nearest T_STEPS
+    // snap zoom
     var bestIdx=tIdx;
     var bestDiff=Infinity;
     T_STEPS.forEach(function(s,i){
       var d=Math.abs(s-animT);
       if(d<bestDiff){bestDiff=d;bestIdx=i;}
     });
-    tIdx=bestIdx; T=T_STEPS[tIdx]; H=T*Math.sqrt(3)/2;
-    updateZoomButtons();
-    // snap rotation to nearest 30deg
+    // snap rotation
     var snapRot=Math.round(animRotAngle/(Math.PI/6));
     globalRotSteps=((snapRot%12)+12)%12;
-    // snap pan
+    // apply snapped T while keeping gridOff proportional
+    var oldT=T;
+    tIdx=bestIdx; T=T_STEPS[tIdx]; H=T*Math.sqrt(3)/2;
+    if(oldT!==T){
+      // Tが変わった場合、CW/2を基準にgridOffをスケール
+      gridOffX=CW/2-(CW/2-gridOffX)*(T/oldT);
+      gridOffY=CH/2-(CH/2-gridOffY)*(H/(oldT*Math.sqrt(3)/2));
+    }
+    updateZoomButtons();
     snapGridPos();
     startAnim();
   } else if(touchState==='piece-drag' && selCell){
